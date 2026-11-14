@@ -123,12 +123,12 @@ export const GlossaryModal: React.FC<GlossaryModalProps> = ({
             return (
               <div key={termKey} className="pt-4 first:pt-0 space-y-2">
                 <div className="flex items-baseline gap-2">
-                  <h3 className="text-base font-bold text-[#0072BC]">{item.title}</h3>
+                  <h3 className="text-base font-bold text-[#1B1B1B]">{item.title}</h3>
                   <span className="text-xs font-mono text-[#58585B]">({item.subtitle})</span>
                 </div>
                 <p className="text-xs sm:text-sm leading-relaxed text-[#1B1B1B]">{item.definition}</p>
-                <div className="p-3 rounded-sm bg-[#F0F4F8] border border-[#BFDBFE] text-xs text-[#1B1B1B] leading-relaxed">
-                  <strong className="text-[#1967D2] font-semibold">Scientific Guide: </strong>
+                <div className="p-3 rounded-sm bg-[#F6F6F6] border border-[#E5E7EB] text-xs text-[#1B1B1B] leading-relaxed">
+                  <strong className="text-[#1B1B1B] font-semibold">Scientific Guide: </strong>
                   {item.practicalExample}
                 </div>
               </div>
@@ -141,7 +141,7 @@ export const GlossaryModal: React.FC<GlossaryModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1967D2] hover:bg-[#1557B0] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1967D2]"
+            className="px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1B1B1B] hover:bg-[#000000] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1B1B1B]"
           >
             Close Explainer
           </button>

@@ -23,16 +23,16 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
     <section
       id="trend-comparison"
       aria-labelledby="comparison-heading"
-      className="py-12 border-b border-[#E0E0E0] space-y-8"
+      className="py-12 border-b border-[#E5E7EB] space-y-8"
     >
       <div className="space-y-1">
-        <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1967D2] uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#58585B] uppercase tracking-widest">
           <span>STEP 05</span>
           <span>/</span>
           <span>CROSS-VARIABLE SYNTHESIS</span>
         </div>
         <h2 id="comparison-heading" className="text-2xl sm:text-3xl font-display font-extrabold text-[#1B1B1B] tracking-tight flex items-center gap-2.5">
-          <GitCompare className="w-6 h-6 text-[#1967D2]" aria-hidden="true" />
+          <GitCompare className="w-6 h-6 text-[#1B1B1B]" aria-hidden="true" />
           Compare the Trends: Discover Patterns
         </h2>
         <p className="text-sm text-[#58585B]">
@@ -40,16 +40,16 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
         </p>
       </div>
 
-      {/* Side-by-Side Comparison Cards (NASA Earthdata White Layout) */}
+      {/* Side-by-Side Comparison Cards (NASA Strict Monochrome Layout) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* NO2 Card */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4">
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-[#F0F0F0] pb-3">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#0072BC]" aria-hidden="true" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#15418C]" aria-hidden="true" />
               <h3 className="font-bold text-[#1B1B1B]">Nitrogen Dioxide (NO2)</h3>
             </div>
-            <span className="text-xs font-mono text-[#0072BC] bg-[#E8F0FE] px-2 py-0.5 rounded-sm border border-[#BFDBFE]">
+            <span className="text-xs font-mono text-[#1B1B1B] bg-[#F4F4F5] px-2 py-0.5 rounded-sm border border-[#E4E4E7]">
               {no2Metadata.unit}
             </span>
           </div>
@@ -57,8 +57,8 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
           <div className="space-y-3 text-xs">
             <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
               <span className="text-[#58585B] font-mono uppercase">Trend Status:</span>
-              <span className="font-bold text-[#1E40AF] capitalize flex items-center gap-1">
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#1967D2]" aria-hidden="true" />
+              <span className="font-bold text-[#1B1B1B] capitalize flex items-center gap-1">
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
                 Positive Point Estimate
               </span>
             </div>
@@ -79,9 +79,9 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
 
             <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
               <span className="text-[#58585B] font-mono uppercase">Statistical Significance:</span>
-              <span className="font-mono text-[#92400E]">
+              <span className="font-mono text-[#1B1B1B]">
                 p = 0.2568 (HAC){" "}
-                <span className="font-bold text-[#92400E]">
+                <span className="font-bold text-[#1B1B1B]">
                   (Not Significant at α = 0.05)
                 </span>
               </span>
@@ -109,13 +109,13 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
         </div>
 
         {/* AOD Card */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4">
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-[#F0F0F0] pb-3">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#D97706]" aria-hidden="true" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1B1B1B]" aria-hidden="true" />
               <h3 className="font-bold text-[#1B1B1B]">Aerosol Optical Depth (AOD)</h3>
             </div>
-            <span className="text-xs font-mono text-[#B45309] bg-[#FEF3C7] px-2 py-0.5 rounded-sm border border-[#FDE68A]">
+            <span className="text-xs font-mono text-[#1B1B1B] bg-[#F4F4F5] px-2 py-0.5 rounded-sm border border-[#E4E4E7]">
               {aodMetadata.unit} (550 nm)
             </span>
           </div>
@@ -123,8 +123,8 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
           <div className="space-y-3 text-xs">
             <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
               <span className="text-[#58585B] font-mono uppercase">Trend Status:</span>
-              <span className="font-bold text-[#065F46] capitalize flex items-center gap-1">
-                <TrendingDown className="w-3.5 h-3.5 text-[#059669]" aria-hidden="true" />
+              <span className="font-bold text-[#1B1B1B] capitalize flex items-center gap-1">
+                <TrendingDown className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
                 Decreasing Trend
               </span>
             </div>
@@ -147,7 +147,7 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
               <span className="text-[#58585B] font-mono uppercase">Statistical Significance:</span>
               <span className="font-mono text-[#1B1B1B]">
                 p = {aodMetadata.p_value < 0.0001 ? "< 0.0001" : aodMetadata.p_value}{" "}
-                <span className="text-[#059669] font-bold">
+                <span className="text-[#1B1B1B] font-bold">
                   (Statistically Significant)
                 </span>
               </span>
@@ -176,9 +176,9 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
       </div>
 
       {/* Pattern Synthesis Card */}
-      <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
+      <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded-sm text-[11px] font-mono font-bold uppercase bg-[#EBEBEB] text-[#1B1B1B]">
+          <span className="px-2 py-0.5 rounded-sm text-[11px] font-mono font-bold uppercase bg-[#F4F4F5] text-[#1B1B1B] border border-[#E4E4E7]">
             SYNTHESIS FINDING
           </span>
           <h3 className="text-base font-bold text-[#1B1B1B]">{relationshipTitle}</h3>
@@ -186,30 +186,32 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
         <p className="text-xs sm:text-sm leading-relaxed text-[#58585B]">{dynamicDetail}</p>
       </div>
 
-      {/* CRITICAL SCIENTIFIC GUARDRAIL BANNER (NASA Official Red Warning Box) */}
-      <div className="p-4 rounded-sm bg-[#FFF5F5] border-l-4 border-[#E4002B] text-xs sm:text-sm text-[#991B1B] leading-relaxed flex items-start gap-3.5 shadow-sm">
+      {/* CRITICAL SCIENTIFIC GUARDRAIL BANNER (Strict NASA Red Accent Card) */}
+      <div className="p-4 rounded-sm bg-[#F6F6F6] border-l-4 border-[#E4002B] text-xs sm:text-sm text-[#1B1B1B] leading-relaxed flex items-start gap-3.5 shadow-sm">
         <ShieldAlert className="w-5 h-5 text-[#E4002B] shrink-0 mt-0.5" aria-hidden="true" />
         <div>
-          <strong className="text-[#991B1B] block mb-0.5 font-bold uppercase tracking-wide">
+          <strong className="text-[#1B1B1B] block mb-0.5 font-bold uppercase tracking-wide">
             Important Methodological Note:
           </strong>
           NO2 and AOD are analyzed separately. Their raw values are never directly compared on the same numerical
           scale because they measure different physical atmospheric properties and use different units
-          (<span className="font-mono font-bold">molecules/cm²</span> vs.{" "}
-          <span className="font-mono font-bold">unitless optical thickness</span>). Similar trend directions
+          (<span className="font-mono font-bold text-[#1B1B1B]">molecules/cm²</span> vs.{" "}
+          <span className="font-mono font-bold text-[#1B1B1B]">unitless optical thickness</span>). Similar trend directions
           or divergent trajectories do not imply direct causation.
         </div>
       </div>
 
-      {/* Next Step CTA */}
+      {/* Next Step CTA with Red Circle Arrow Hover Animation */}
       <div className="pt-2 flex justify-end">
         <button
           type="button"
           onClick={onNextStep}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1967D2] hover:bg-[#1557B0] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1967D2]"
+          className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1B1B1B] hover:bg-[#000000] text-white transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-[#1B1B1B]"
         >
           <span>Step 6: Read Insights &amp; Interpretation</span>
-          <ArrowDown className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+          <span className="w-5 h-5 rounded-full bg-[#E4002B] flex items-center justify-center transition-transform group-hover:translate-x-1">
+            <ArrowDown className="w-3 h-3 text-white" aria-hidden="true" />
+          </span>
         </button>
       </div>
     </section>

@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.22",
     "chart.js": "^4.6.1",
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.72.0",
     "papaparse": "^5.7.1",
     "react": "^19.3.1",

@@ -35,6 +35,8 @@ interface TimeSeriesChartProps {
   trendlinePoints?: (number | null)[];
   trendlineLabel?: string;
   isDailyView?: boolean;
+  activePointIndex?: number;
+  onHoverPointIndex?: (idx: number) => void;
 }
 
 export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
@@ -45,15 +47,17 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   trendlinePoints,
   trendlineLabel,
   isDailyView = false,
+  activePointIndex,
+  onHoverPointIndex,
 }) => {
   const isCyan = colorScheme === "cyan";
-  // NASA Earthdata palette: NO2 uses NASA Cobalt Blue #0072BC; AOD uses Earthdata Amber #D97706
-  const primaryColor = isCyan ? "#0072BC" : "#D97706";
+  // NASA Earthdata palette: NO2 uses NASA Deep Blue #15418C; AOD uses Earthdata Charcoal #1B1B1B
+  const primaryColor = isCyan ? "#15418C" : "#1B1B1B";
   const primaryBg = isCyan
-    ? "rgba(0, 114, 188, 0.08)"
-    : "rgba(217, 119, 6, 0.08)";
-  // Trendline: NASA Red #E4002B for NO2; Emerald Green #059669 for AOD
-  const trendlineColor = isCyan ? "#E4002B" : "#059669";
+    ? "rgba(21, 65, 140, 0.08)"
+    : "rgba(27, 27, 27, 0.06)";
+  // Trendline: NASA Red #E4002B for NO2; Slate #58585B for AOD
+  const trendlineColor = isCyan ? "#E4002B" : "#58585B";
 
   const labels = dataPoints.map((d) => d.date);
   const values = dataPoints.map((d) => d.value);
@@ -69,9 +73,16 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
       borderColor: primaryColor,
       backgroundColor: primaryBg,
       borderWidth: isDailyView ? 1.2 : 2.2,
-      pointRadius: isDailyView ? 0 : 2.5,
-      pointHoverRadius: isDailyView ? 3 : 5,
-      pointBackgroundColor: primaryColor,
+      pointRadius: (ctx: any) => {
+        if (isDailyView) return 0;
+        if (activePointIndex !== undefined && ctx.dataIndex === activePointIndex) return 6.5;
+        return 2.5;
+      },
+      pointHoverRadius: isDailyView ? 3 : 6,
+      pointBackgroundColor: (ctx: any) => {
+        if (activePointIndex !== undefined && ctx.dataIndex === activePointIndex) return "#E4002B";
+        return primaryColor;
+      },
       pointBorderColor: "#FFFFFF",
       pointBorderWidth: 1.5,
       tension: isDailyView ? 0 : 0.1,
@@ -112,6 +123,11 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
     interaction: {
       mode: "index",
       intersect: false,
+    },
+    onHover: (_event, elements) => {
+      if (elements && elements.length > 0 && onHoverPointIndex) {
+        onHoverPointIndex(elements[0].index);
+      }
     },
     plugins: {
       legend: {

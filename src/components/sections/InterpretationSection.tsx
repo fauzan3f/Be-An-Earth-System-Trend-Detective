@@ -46,7 +46,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
       className="py-12 space-y-10"
     >
       <div className="space-y-1">
-        <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#059669] uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#58585B] uppercase tracking-widest">
           <span>STEP 06</span>
           <span>/</span>
           <span>SCIENTIFIC INTERPRETATION &amp; DECISION SUPPORT</span>
@@ -55,7 +55,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           id="interpretation-heading"
           className="text-2xl sm:text-3xl font-display font-extrabold text-[#1B1B1B] tracking-tight flex items-center gap-2.5"
         >
-          <BookOpen className="w-6 h-6 text-[#1967D2]" aria-hidden="true" />
+          <BookOpen className="w-6 h-6 text-[#1B1B1B]" aria-hidden="true" />
           Read the Interpretation: Understand the Results
         </h2>
         <p className="text-sm text-[#58585B] max-w-3xl leading-relaxed">
@@ -64,17 +64,17 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
         </p>
       </div>
 
-      {/* 4 Core NASA Detective Questions Grid */}
+      {/* 4 Core NASA Detective Questions Grid (Strict Monochrome) */}
       <div className="space-y-4">
         <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1B1B1B] flex items-center gap-2">
-          <FileText className="w-4 h-4 text-[#1967D2]" aria-hidden="true" />
+          <FileText className="w-4 h-4 text-[#1B1B1B]" aria-hidden="true" />
           The 4 Core Trend Detective Questions Answered
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Question 1: What is changing? */}
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#1967D2]">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#58585B]">
               01 : WHAT IS CHANGING?
             </span>
             <div className="text-sm font-bold text-[#1B1B1B]">
@@ -88,8 +88,8 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           </div>
 
           {/* Question 2: Where? */}
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#E4002B]">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#58585B]">
               02 : WHERE?
             </span>
             <div className="text-sm font-bold text-[#1B1B1B]">
@@ -102,8 +102,8 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           </div>
 
           {/* Question 3: How much? */}
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#D97706]">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#58585B]">
               03 : HOW MUCH?
             </span>
             <div className="text-sm font-bold font-mono text-[#1B1B1B]">
@@ -116,8 +116,8 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           </div>
 
           {/* Question 4: Is it significant? */}
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#059669]">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#58585B]">
               04 : IS IT SIGNIFICANT?
             </span>
             <div className="text-sm font-bold text-[#1B1B1B]">
@@ -134,12 +134,12 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
       {/* Educational Guide to the Metrics */}
       <div className="space-y-4">
         <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1B1B1B] flex items-center gap-2">
-          <HelpCircle className="w-4 h-4 text-[#1967D2]" aria-hidden="true" />
+          <HelpCircle className="w-4 h-4 text-[#1B1B1B]" aria-hidden="true" />
           Educational Guide: How to Interpret Scientific Metrics
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-1.5">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-1.5">
             <h4 className="text-sm font-bold text-[#1B1B1B]">Point Estimate vs. Significant Trend</h4>
             <p className="text-xs text-[#58585B] leading-relaxed">
               A positive point estimate alone does not prove an upward trend. When the HAC p-value exceeds 0.05 and the
@@ -147,7 +147,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
             </p>
           </div>
 
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-1.5">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-1.5">
             <h4 className="text-sm font-bold text-[#1B1B1B]">HAC / Newey-West Standard Errors</h4>
             <p className="text-xs text-[#58585B] leading-relaxed">
               Atmospheric data exhibit serial autocorrelation (what happens in month t affects month t+1). HAC (Heteroskedasticity
@@ -155,7 +155,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
             </p>
           </div>
 
-          <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-1.5">
+          <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-1.5">
             <h4 className="text-sm font-bold text-[#1B1B1B]">Simple Linear Reference Line vs. Model Fit</h4>
             <p className="text-xs text-[#58585B] leading-relaxed">
               The dashed reference line drawn on the chart is a simple linear regression for visual orientation only. It is not
@@ -168,11 +168,11 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
       {/* Scientific Limitations & Data Quality Notes */}
       <div className="space-y-4">
         <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1B1B1B] flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-[#D97706]" aria-hidden="true" />
+          <AlertTriangle className="w-4 h-4 text-[#1B1B1B]" aria-hidden="true" />
           Official Data Quality, Limitations &amp; Guardrails
         </h3>
 
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4 text-xs sm:text-sm text-[#58585B] leading-relaxed">
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-4 text-xs sm:text-sm text-[#58585B] leading-relaxed">
           <ol className="list-decimal list-inside space-y-3">
             <li className="pl-1">
               <strong className="text-[#1B1B1B]">Coverage Metric Definition:</strong> The 96.17% coverage metric represents
@@ -196,11 +196,11 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
       </div>
 
       {/* Official Handoff Files & Export Utilities */}
-      <div className="p-6 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4">
+      <div className="p-6 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F0F0F0] pb-4">
           <div className="space-y-1">
             <h4 className="text-sm font-bold text-[#1B1B1B] flex items-center gap-2">
-              <Database className="w-4 h-4 text-[#1967D2]" aria-hidden="true" />
+              <Database className="w-4 h-4 text-[#1B1B1B]" aria-hidden="true" />
               Role 1 Official Handoff Data Files &amp; Export Utilities
             </h4>
             <p className="text-xs text-[#58585B]">
@@ -214,7 +214,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
               onClick={() => onDownloadCsv("NO2")}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[#F6F6F6] hover:bg-[#EBEBEB] border border-[#D1D5DB] text-[#1B1B1B] transition-colors"
             >
-              <Download className="w-3.5 h-3.5 text-[#0072BC]" aria-hidden="true" />
+              <Download className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
               <span>Export NO2 CSV</span>
             </button>
 
@@ -223,14 +223,14 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
               onClick={() => onDownloadCsv("AOD")}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[#F6F6F6] hover:bg-[#EBEBEB] border border-[#D1D5DB] text-[#1B1B1B] transition-colors"
             >
-              <Download className="w-3.5 h-3.5 text-[#D97706]" aria-hidden="true" />
+              <Download className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
               <span>Export AOD CSV</span>
             </button>
 
             <button
               type="button"
               onClick={onOpenUpload}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[#1967D2] hover:bg-[#1557B0] text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[#1B1B1B] hover:bg-[#000000] text-white transition-colors"
             >
               <Upload className="w-3.5 h-3.5 text-white" aria-hidden="true" />
               <span>Load Role 1 Data</span>
@@ -241,7 +241,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
               onClick={() => onOpenGlossary("All")}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[#F6F6F6] hover:bg-[#EBEBEB] border border-[#D1D5DB] text-[#1B1B1B] transition-colors"
             >
-              <HelpCircle className="w-3.5 h-3.5 text-[#1967D2]" aria-hidden="true" />
+              <HelpCircle className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
               <span>Full Glossary</span>
             </button>
           </div>
@@ -252,9 +252,9 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           <button
             type="button"
             onClick={() => downloadFile("/data/no2_dashboard_timeseries.csv", "no2_dashboard_timeseries.csv")}
-            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] text-left transition-colors"
           >
-            <FileCheck2 className="w-4 h-4 text-[#0072BC] shrink-0" aria-hidden="true" />
+            <FileCheck2 className="w-4 h-4 text-[#1B1B1B] shrink-0" aria-hidden="true" />
             <div>
               <div className="text-xs font-bold text-[#1B1B1B]">Timeseries CSV</div>
               <div className="text-[10px] text-[#64748B]">190 months (≥20 days)</div>
@@ -264,9 +264,9 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           <button
             type="button"
             onClick={() => downloadFile("/data/no2_insight.json", "no2_insight.json")}
-            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] text-left transition-colors"
           >
-            <Database className="w-4 h-4 text-[#1967D2] shrink-0" aria-hidden="true" />
+            <Database className="w-4 h-4 text-[#1B1B1B] shrink-0" aria-hidden="true" />
             <div>
               <div className="text-xs font-bold text-[#1B1B1B]">Insight JSON</div>
               <div className="text-[10px] text-[#64748B]">Metadata, stats &amp; CIs</div>
@@ -276,9 +276,9 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           <button
             type="button"
             onClick={() => downloadFile("/data/no2_sensitivity_analysis.csv", "no2_sensitivity_analysis.csv")}
-            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] text-left transition-colors"
           >
-            <FileText className="w-4 h-4 text-[#D97706] shrink-0" aria-hidden="true" />
+            <FileText className="w-4 h-4 text-[#1B1B1B] shrink-0" aria-hidden="true" />
             <div>
               <div className="text-xs font-bold text-[#1B1B1B]">Sensitivity CSV</div>
               <div className="text-[10px] text-[#64748B]">15, 20, 25 day tests</div>
@@ -288,9 +288,9 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           <button
             type="button"
             onClick={() => downloadFile("/data/no2_quality_audit.csv", "no2_quality_audit.csv")}
-            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] text-left transition-colors"
           >
-            <FileText className="w-4 h-4 text-[#059669] shrink-0" aria-hidden="true" />
+            <FileText className="w-4 h-4 text-[#1B1B1B] shrink-0" aria-hidden="true" />
             <div>
               <div className="text-xs font-bold text-[#1B1B1B]">Quality Audit CSV</div>
               <div className="text-[10px] text-[#64748B]">Monthly coverage data</div>
@@ -306,7 +306,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
             href="https://giovanni.gsfc.nasa.gov/giovanni/"
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-1 text-[#1967D2] hover:text-[#1557B0] font-semibold underline underline-offset-2"
+            className="inline-flex items-center gap-1 text-[#1B1B1B] hover:text-[#000000] font-semibold underline underline-offset-2"
           >
             <span>Access NASA Giovanni Portal</span>
             <ExternalLink className="w-3 h-3" aria-hidden="true" />

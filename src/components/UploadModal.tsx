@@ -128,15 +128,21 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               }}
               className={`p-3 rounded-sm border text-left flex items-center justify-between transition-colors ${
                 targetVariable === "NO2"
-                  ? "bg-[#E8F0FE] border-[#1967D2] text-[#1967D2]"
+                  ? "bg-[#12151B] text-white border-[#12151B]"
                   : "bg-white border-[#D1D5DB] text-[#58585B] hover:border-[#9CA3AF]"
               }`}
             >
               <div>
-                <div className="font-bold text-sm text-[#1B1B1B]">NO2 Tropospheric Column</div>
-                <div className="text-[11px] text-[#58585B] font-mono">Aura/OMI OMNO2d</div>
+                <div className={`font-bold text-sm ${targetVariable === "NO2" ? "text-white" : "text-[#1B1B1B]"}`}>
+                  NO2 Tropospheric Column
+                </div>
+                <div className={`text-[11px] font-mono ${targetVariable === "NO2" ? "text-[#A1A1AA]" : "text-[#58585B]"}`}>
+                  Aura/OMI OMNO2d
+                </div>
               </div>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-white text-[#1967D2] border border-[#BFDBFE] font-bold">
+              <span className={`font-mono text-xs px-2 py-0.5 rounded border font-bold ${
+                targetVariable === "NO2" ? "bg-[#27272A] text-white border-white/20" : "bg-[#F4F4F5] text-[#1B1B1B] border-[#D1D5DB]"
+              }`}>
                 NO2
               </span>
             </button>
@@ -149,15 +155,21 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               }}
               className={`p-3 rounded-sm border text-left flex items-center justify-between transition-colors ${
                 targetVariable === "AOD"
-                  ? "bg-[#FEF3C7] border-[#D97706] text-[#B45309]"
+                  ? "bg-[#12151B] text-white border-[#12151B]"
                   : "bg-white border-[#D1D5DB] text-[#58585B] hover:border-[#9CA3AF]"
               }`}
             >
               <div>
-                <div className="font-bold text-sm text-[#1B1B1B]">AOD Aerosol Optical Depth</div>
-                <div className="text-[11px] text-[#58585B] font-mono">MODIS MYD08_M3</div>
+                <div className={`font-bold text-sm ${targetVariable === "AOD" ? "text-white" : "text-[#1B1B1B]"}`}>
+                  AOD Aerosol Optical Depth
+                </div>
+                <div className={`text-[11px] font-mono ${targetVariable === "AOD" ? "text-[#A1A1AA]" : "text-[#58585B]"}`}>
+                  MODIS MYD08_M3
+                </div>
               </div>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-white text-[#B45309] border border-[#FDE68A] font-bold">
+              <span className={`font-mono text-xs px-2 py-0.5 rounded border font-bold ${
+                targetVariable === "AOD" ? "bg-[#27272A] text-white border-white/20" : "bg-[#F4F4F5] text-[#1B1B1B] border-[#D1D5DB]"
+              }`}>
                 AOD
               </span>
             </button>
@@ -250,7 +262,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             type="button"
             disabled={!parsedPreview}
             onClick={handleApply}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1967D2] hover:bg-[#1557B0] disabled:bg-[#D1D5DB] disabled:text-[#9CA3AF] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1967D2]"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1B1B1B] hover:bg-[#000000] disabled:bg-[#D1D5DB] disabled:text-[#9CA3AF] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1B1B1B]"
           >
             <FileText className="w-4 h-4" aria-hidden="true" />
             Apply to {targetVariable} Analysis

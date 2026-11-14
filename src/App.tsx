@@ -28,6 +28,7 @@ export function App() {
   // Default analysis period: 2010 to 2025
   const [startYear, setStartYear] = useState<number>(2010);
   const [endYear, setEndYear] = useState<number>(2025);
+  const [activeMapMonthIndex, setActiveMapMonthIndex] = useState<number>(0);
 
   // Load real cleaned NASA Giovanni datasets on mount and when filter changes
   useEffect(() => {
@@ -251,6 +252,9 @@ export function App() {
             excludePartialMonths={excludePartialMonths}
             onToggleExcludePartialMonths={setExcludePartialMonths}
             dailyCoverage={no2Dataset?.dailyCoverage}
+            no2Series={no2Dataset?.series || []}
+            activeMapMonthIndex={activeMapMonthIndex}
+            onSelectMapMonthIndex={setActiveMapMonthIndex}
             onNextStep={() => scrollTo("no2-explorer")}
           />
 
@@ -266,6 +270,8 @@ export function App() {
             viewMode={no2ViewMode}
             onViewModeChange={setNo2ViewMode}
             onOpenGlossaryTooltip={handleOpenGlossary}
+            activeMapMonthIndex={activeMapMonthIndex}
+            onSelectMapMonthIndex={setActiveMapMonthIndex}
             onNextStep={() => scrollTo("aod-explorer")}
           />
 

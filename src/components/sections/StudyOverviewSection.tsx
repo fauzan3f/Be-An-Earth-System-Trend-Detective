@@ -6,8 +6,10 @@ import {
   RotateCcw,
   ArrowDown,
   Layers,
+  Compass,
 } from "lucide-react";
-import type { DailyCoverageSummary } from "../../types";
+import type { DailyCoverageSummary, MonthlyDataPoint } from "../../types";
+import { WindyPollutionMap } from "../WindyPollutionMap";
 
 interface StudyOverviewSectionProps {
   startYear: number;
@@ -20,6 +22,9 @@ interface StudyOverviewSectionProps {
   excludePartialMonths: boolean;
   onToggleExcludePartialMonths: (val: boolean) => void;
   dailyCoverage?: DailyCoverageSummary;
+  no2Series: MonthlyDataPoint[];
+  activeMapMonthIndex: number;
+  onSelectMapMonthIndex: (index: number) => void;
   onNextStep: () => void;
 }
 
@@ -34,35 +39,38 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
   excludePartialMonths,
   onToggleExcludePartialMonths,
   dailyCoverage,
+  no2Series,
+  activeMapMonthIndex,
+  onSelectMapMonthIndex,
   onNextStep,
 }) => {
   return (
     <section
       id="study-overview"
       aria-labelledby="overview-heading"
-      className="py-12 border-b border-[#E0E0E0] space-y-8"
+      className="py-12 border-b border-[#E5E7EB] space-y-8"
     >
       <div className="space-y-1">
-        <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1967D2] uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#58585B] uppercase tracking-widest">
           <span>STEP 02</span>
           <span>/</span>
-          <span>STUDY PARAMETERS &amp; DATASET CATALOG</span>
+          <span>STUDY PARAMETERS &amp; SATELLITE VISUALIZER</span>
         </div>
         <h2 id="overview-heading" className="text-2xl sm:text-3xl font-display font-extrabold text-[#1B1B1B] tracking-tight">
-          Study Overview: Parameters &amp; Filter Controls
+          Study Overview: Parameters, Controls &amp; Atmospheric Map
         </h2>
         <p className="text-sm text-[#58585B] max-w-3xl leading-relaxed">
-          Configure temporal parameters and inspect Earthdata dataset metadata. All downstream time-series
-          charts, Sen's slope regressions, and statistical significance tests recalculate dynamically.
+          Configure temporal parameters and explore the interactive satellite visualizer centered on West Kalimantan.
+          Downstream time-series charts, Sen's slope regressions, and statistical tests recalculate dynamically.
         </p>
       </div>
 
-      {/* Scope Cards Grid (Clean White Canvas on Light Gray) */}
+      {/* Scope Cards Grid (Strict NASA Monochrome Layout) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Region */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-          <div className="flex items-center gap-2 text-[#E4002B] text-xs font-mono font-bold uppercase tracking-wider">
-            <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+          <div className="flex items-center gap-2 text-[#58585B] text-xs font-mono font-bold uppercase tracking-wider">
+            <MapPin className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
             <span>STUDY REGION</span>
           </div>
           <div className="text-base font-bold text-[#1B1B1B]">West Kalimantan, Indonesia</div>
@@ -75,12 +83,12 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
         </div>
 
         {/* Period */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-          <div className="flex items-center gap-2 text-[#1967D2] text-xs font-mono font-bold uppercase tracking-wider">
-            <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+          <div className="flex items-center gap-2 text-[#58585B] text-xs font-mono font-bold uppercase tracking-wider">
+            <Calendar className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
             <span>TEMPORAL BASELINE</span>
           </div>
-          <div className="text-base font-bold text-[#1B1B1B]">2010 to 2025 Multi-Year Baseline</div>
+          <div className="text-base font-bold text-[#1B1B1B]">2010 to 2026 Multi-Year Baseline</div>
           <div className="text-xs text-[#58585B] font-mono">
             Active Slice: {startYear} to {endYear} ({endYear - startYear + 1} Years)
           </div>
@@ -90,9 +98,9 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
         </div>
 
         {/* Temporal Resolution */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
-          <div className="flex items-center gap-2 text-[#059669] text-xs font-mono font-bold uppercase tracking-wider">
-            <Layers className="w-3.5 h-3.5" aria-hidden="true" />
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
+          <div className="flex items-center gap-2 text-[#58585B] text-xs font-mono font-bold uppercase tracking-wider">
+            <Layers className="w-3.5 h-3.5 text-[#1B1B1B]" aria-hidden="true" />
             <span>PROCESSING RESOLUTION</span>
           </div>
           <div className="text-base font-bold text-[#1B1B1B]">Monthly Level-3 Grids</div>
@@ -106,10 +114,10 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
       </div>
 
       {/* Interactive Controls & Filters Card */}
-      <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4">
+      <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F0F0F0] pb-3">
           <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#1B1B1B]">
-            <SlidersHorizontal className="w-4 h-4 text-[#1967D2]" aria-hidden="true" />
+            <SlidersHorizontal className="w-4 h-4 text-[#1B1B1B]" aria-hidden="true" />
             <span>Interactive Range Slicer &amp; Quality Filter</span>
           </div>
 
@@ -186,14 +194,14 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
           {/* Quality Filter Checkbox */}
           <label
             htmlFor="overview-edge-filter"
-            className="flex items-center gap-2 cursor-pointer text-xs text-[#1B1B1B] hover:text-[#1967D2] select-none"
+            className="flex items-center gap-2 cursor-pointer text-xs text-[#1B1B1B] hover:text-[#000000] select-none"
           >
             <input
               id="overview-edge-filter"
               type="checkbox"
               checked={excludePartialMonths}
               onChange={(e) => onToggleExcludePartialMonths(e.target.checked)}
-              className="w-4 h-4 rounded-sm border-[#D1D5DB] text-[#1967D2] focus:ring-[#1967D2]"
+              className="w-4 h-4 rounded-sm border-[#D1D5DB] text-[#E4002B] focus:ring-[#E4002B]"
             />
             <span className="font-medium">
               Exclude partial edge months (valid days &lt; 5)
@@ -205,13 +213,40 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
         </div>
       </div>
 
-      {/* Dataset Briefs (2 Cards) */}
+      {/* Windy.com-Style Interactive Satellite & Atmospheric Map Visualizer */}
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#58585B] uppercase tracking-wider">
+              <Compass className="w-4 h-4 text-[#E4002B]" aria-hidden="true" />
+              <span>WINDY.COM-STYLE SATELLITE &amp; POLLUTION VISUALIZER</span>
+            </div>
+            <h3 className="text-lg font-bold text-[#1B1B1B]">
+              West Kalimantan Atmospheric Column Density &amp; Particle Streamlines
+            </h3>
+          </div>
+          <div className="text-xs font-mono text-[#58585B]">
+            Interactive Timeline Sync · 190 Monthly Observation Records
+          </div>
+        </div>
+
+        {/* The Windy Pollution Map Component */}
+        <WindyPollutionMap
+          series={no2Series}
+          activeIndex={activeMapMonthIndex}
+          onSelectIndex={onSelectMapMonthIndex}
+          variableName="NO2"
+          unit="molecules/cm²"
+        />
+      </div>
+
+      {/* Dataset Briefs (2 Cards - Clean Monochrome) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* NO2 Brief */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
           <div className="flex items-center justify-between border-b border-[#F0F0F0] pb-2">
-            <span className="px-2 py-0.5 rounded-sm text-[11px] font-mono font-bold uppercase bg-[#E8F0FE] text-[#1967D2] border border-[#BFDBFE]">
-              DATASET 01 · NO2
+            <span className="px-2 py-0.5 rounded-sm text-[11px] font-mono font-bold uppercase bg-[#F4F4F5] text-[#1B1B1B] border border-[#E4E4E7]">
+              DATASET 01 : NO2
             </span>
             <span className="text-xs font-mono text-[#58585B]">molecules/cm²</span>
           </div>
@@ -225,10 +260,10 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
         </div>
 
         {/* AOD Brief */}
-        <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
+        <div className="p-5 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-2">
           <div className="flex items-center justify-between border-b border-[#F0F0F0] pb-2">
-            <span className="px-2 py-0.5 rounded-sm text-[11px] font-mono font-bold uppercase bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]">
-              DATASET 02 · AOD
+            <span className="px-2 py-0.5 rounded-sm text-[11px] font-mono font-bold uppercase bg-[#F4F4F5] text-[#1B1B1B] border border-[#E4E4E7]">
+              DATASET 02 : AOD
             </span>
             <span className="text-xs font-mono text-[#58585B]">Unitless (550 nm)</span>
           </div>
@@ -242,15 +277,17 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
         </div>
       </div>
 
-      {/* Next Step CTA */}
+      {/* Next Step CTA with Red Circle Arrow Hover Animation */}
       <div className="pt-2 flex justify-end">
         <button
           type="button"
           onClick={onNextStep}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1967D2] hover:bg-[#1557B0] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1967D2]"
+          className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1B1B1B] hover:bg-[#000000] text-white transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-[#1B1B1B]"
         >
           <span>Step 3: Explore NO2 Trends</span>
-          <ArrowDown className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+          <span className="w-5 h-5 rounded-full bg-[#E4002B] flex items-center justify-center transition-transform group-hover:translate-x-1">
+            <ArrowDown className="w-3 h-3 text-white" aria-hidden="true" />
+          </span>
         </button>
       </div>
     </section>
