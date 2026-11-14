@@ -226,18 +226,19 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-space-950 text-slate-100 flex flex-col justify-between selection:bg-sky-500/30 selection:text-sky-200">
-      {/* Sticky Stepper Navigation Bar */}
+    <div className="min-h-screen bg-[#F6F6F6] text-[#1B1B1B] flex flex-col justify-between font-body antialiased selection:bg-[#1967D2]/20 selection:text-[#1967D2]">
+      {/* Official Pure Black Sticky Top Stepper Navigation */}
       <StickyStepperNav
         onOpenGlossary={() => handleOpenGlossary("All")}
         onOpenUpload={() => setIsUploadOpen(true)}
       />
 
-      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <main>
-          {/* Section 1: Welcome Hero */}
-          <WelcomeSection onStartExploring={() => scrollTo("study-overview")} />
+      <main className="flex-1">
+        {/* Section 1: Official NASA Dark Hero + Telemetry Strip */}
+        <WelcomeSection onStartExploring={() => scrollTo("study-overview")} />
 
+        {/* Transition to Clean High-Contrast Light Editorial Canvas (#F6F6F6 and #FFFFFF) */}
+        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section 2: Study Overview - Explore Settings */}
           <StudyOverviewSection
             startYear={startYear}
@@ -292,14 +293,101 @@ export function App() {
             onOpenUpload={() => setIsUploadOpen(true)}
             onOpenGlossary={handleOpenGlossary}
           />
-        </main>
-      </div>
+        </div>
+      </main>
 
-      {/* Persistent Bottom Bar */}
-      <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500 bg-space-900/60">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>Earth System Trend Detective · 2026 NASA Space Apps Challenge</span>
-          <span>West Kalimantan Multi-Decadal Atmospheric Assessment (2010-2025)</span>
+      {/* Official NASA Earthdata Dark Navy / Black Footer */}
+      <footer className="bg-[#000000] text-white border-t border-[#222222] pt-12 pb-14 mt-16 font-body">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-[#222222] pb-8">
+            {/* NASA Emblem Column */}
+            <div className="space-y-3 md:col-span-2">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#15418C] flex items-center justify-center font-bold text-xs tracking-tighter text-white border border-[#E4002B]">
+                  <span>NASA</span>
+                </div>
+                <div>
+                  <div className="font-bold text-sm tracking-wide text-white uppercase font-display">
+                    National Aeronautics and Space Administration
+                  </div>
+                  <div className="text-xs text-gray-400 font-mono">
+                    Earth Science Data and Information System (ESDIS) Project
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 max-w-md leading-relaxed">
+                Earth System Trend Detective is an open-access scientific interface developed for the
+                2026 NASA Space Apps Challenge, evaluating multi-decadal satellite trends in tropospheric NO2 and AOD over West Kalimantan.
+              </p>
+            </div>
+
+            {/* Scientific Sources */}
+            <div className="space-y-2 text-xs">
+              <div className="font-mono font-bold uppercase tracking-wider text-gray-300">
+                DATA SOURCES &amp; SENSORS
+              </div>
+              <ul className="space-y-1.5 text-gray-400 font-mono">
+                <li>NASA Aura / OMI (OMNO2d v004)</li>
+                <li>NASA Terra &amp; Aqua / MODIS (MYD08_M3)</li>
+                <li>NASA GES DISC Giovanni Portal</li>
+                <li>World Meteorological Org. (WMO)</li>
+              </ul>
+            </div>
+
+            {/* Official Disclaimers */}
+            <div className="space-y-2 text-xs">
+              <div className="font-mono font-bold uppercase tracking-wider text-gray-300">
+                GOVERNMENT &amp; COMPLIANCE
+              </div>
+              <ul className="space-y-1.5 text-gray-400">
+                <li>
+                  <a
+                    href="https://www.nasa.gov/privacy/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-white transition-colors"
+                  >
+                    NASA Web Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.nasa.gov/foia/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-white transition-colors"
+                  >
+                    Freedom of Information Act (FOIA)
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.nasa.gov/general/no-fear-act-notice/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-white transition-colors"
+                  >
+                    No FEAR Act Notice
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://giovanni.gsfc.nasa.gov/giovanni/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-white transition-colors text-[#1967D2]"
+                  >
+                    NASA Giovanni System
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 font-mono">
+            <span>NASA Official: ESDIS Project · Earth Science Division</span>
+            <span>West Kalimantan Multi-Decadal Atmospheric Assessment (2010-2025)</span>
+          </div>
         </div>
       </footer>
 

@@ -89,17 +89,17 @@ export const UploadModal: React.FC<UploadModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="upload-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-xl bg-space-900 border border-slate-700 rounded-xl shadow-2xl p-6 text-slate-100 space-y-5">
+      <div className="relative w-full max-w-xl bg-white border border-[#E0E0E0] rounded-sm shadow-xl p-6 text-[#1B1B1B] space-y-5">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="flex items-center justify-between border-b border-[#E0E0E0] pb-3">
           <div className="flex items-center gap-2.5">
-            <Upload className="w-5 h-5 text-sky-400" aria-hidden="true" />
-            <h2 id="upload-modal-title" className="text-lg font-semibold text-slate-100">
+            <Upload className="w-5 h-5 text-[#1967D2]" aria-hidden="true" />
+            <h2 id="upload-modal-title" className="text-base font-bold text-[#1B1B1B]">
               Load Role 1 CSV / JSON Data
             </h2>
           </div>
@@ -107,7 +107,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             ref={closeBtnRef}
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-100 rounded-lg hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400"
+            className="p-1 text-[#58585B] hover:text-[#1B1B1B] rounded hover:bg-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#1967D2]"
             aria-label="Close upload modal"
           >
             <X className="w-5 h-5" aria-hidden="true" />
@@ -116,7 +116,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
 
         {/* Target Variable Selector */}
         <div className="space-y-1.5">
-          <label htmlFor="target-variable-select" className="block text-xs font-semibold text-slate-300">
+          <label htmlFor="target-variable-select" className="block text-xs font-mono font-bold uppercase tracking-wider text-[#58585B]">
             Target Variable Dataset
           </label>
           <div className="grid grid-cols-2 gap-3" id="target-variable-select">
@@ -126,17 +126,17 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                 setTargetVariable("NO2");
                 if (rawText && fileName) handleProcessContent(rawText, fileName);
               }}
-              className={`p-3 rounded-lg border text-left flex items-center justify-between transition-colors ${
+              className={`p-3 rounded-sm border text-left flex items-center justify-between transition-colors ${
                 targetVariable === "NO2"
-                  ? "bg-sky-950/60 border-sky-600 text-sky-200"
-                  : "bg-space-850 border-slate-800 text-slate-400 hover:border-slate-700"
+                  ? "bg-[#E8F0FE] border-[#1967D2] text-[#1967D2]"
+                  : "bg-white border-[#D1D5DB] text-[#58585B] hover:border-[#9CA3AF]"
               }`}
             >
               <div>
-                <div className="font-semibold text-sm">NO2 Tropospheric Column</div>
-                <div className="text-[11px] text-slate-400">Aura/OMI OMNO2d</div>
+                <div className="font-bold text-sm text-[#1B1B1B]">NO2 Tropospheric Column</div>
+                <div className="text-[11px] text-[#58585B] font-mono">Aura/OMI OMNO2d</div>
               </div>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-sky-900/40 text-sky-300">
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-white text-[#1967D2] border border-[#BFDBFE] font-bold">
                 NO2
               </span>
             </button>
@@ -147,17 +147,17 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                 setTargetVariable("AOD");
                 if (rawText && fileName) handleProcessContent(rawText, fileName);
               }}
-              className={`p-3 rounded-lg border text-left flex items-center justify-between transition-colors ${
+              className={`p-3 rounded-sm border text-left flex items-center justify-between transition-colors ${
                 targetVariable === "AOD"
-                  ? "bg-amber-950/60 border-amber-600 text-amber-200"
-                  : "bg-space-850 border-slate-800 text-slate-400 hover:border-slate-700"
+                  ? "bg-[#FEF3C7] border-[#D97706] text-[#B45309]"
+                  : "bg-white border-[#D1D5DB] text-[#58585B] hover:border-[#9CA3AF]"
               }`}
             >
               <div>
-                <div className="font-semibold text-sm">AOD Aerosol Optical Depth</div>
-                <div className="text-[11px] text-slate-400">MODIS MYD08_M3</div>
+                <div className="font-bold text-sm text-[#1B1B1B]">AOD Aerosol Optical Depth</div>
+                <div className="text-[11px] text-[#58585B] font-mono">MODIS MYD08_M3</div>
               </div>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-amber-900/40 text-amber-300">
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-white text-[#B45309] border border-[#FDE68A] font-bold">
                 AOD
               </span>
             </button>
@@ -180,7 +180,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               reader.readAsText(file);
             }
           }}
-          className="border-2 border-dashed border-slate-700 hover:border-sky-500 rounded-xl p-6 text-center cursor-pointer transition-colors bg-space-850/50 hover:bg-space-850 space-y-2"
+          className="border-2 border-dashed border-[#D1D5DB] hover:border-[#1967D2] rounded-sm p-6 text-center cursor-pointer transition-colors bg-[#F9F9F9] hover:bg-[#F0F4F8] space-y-2"
         >
           <input
             ref={fileInputRef}
@@ -189,20 +189,20 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             onChange={handleFileChange}
             className="hidden"
           />
-          <div className="mx-auto w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-sky-400">
+          <div className="mx-auto w-10 h-10 rounded-full bg-[#E8F0FE] flex items-center justify-center text-[#1967D2]">
             <Upload className="w-5 h-5" aria-hidden="true" />
           </div>
-          <div className="text-sm font-medium text-slate-200">
+          <div className="text-sm font-semibold text-[#1B1B1B]">
             {fileName ? fileName : "Click to select or drag and drop Role 1 file here"}
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs text-[#58585B]">
             Accepts CSV (`date,value` with fill values like NaN or -999) or JSON TrendAnalysisContract
           </div>
         </div>
 
         {/* Loading State */}
         {isProcessing && (
-          <div className="flex items-center justify-center gap-2 py-3 text-sm text-sky-400">
+          <div className="flex items-center justify-center gap-2 py-3 text-xs font-semibold text-[#1967D2]">
             <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
             <span>Parsing data and recalculating Sen's slope...</span>
           </div>
@@ -210,10 +210,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
 
         {/* Error State */}
         {error && (
-          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-950/60 border border-rose-800/80 text-rose-300 text-xs">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" aria-hidden="true" />
+          <div className="flex items-start gap-2.5 p-3 rounded-sm bg-[#FFF5F5] border border-[#FECACA] text-[#991B1B] text-xs">
+            <AlertCircle className="w-4 h-4 text-[#E4002B] shrink-0 mt-0.5" aria-hidden="true" />
             <div>
-              <span className="font-semibold">Import Error: </span>
+              <span className="font-bold">Import Error: </span>
               {error}
             </div>
           </div>
@@ -221,12 +221,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({
 
         {/* Success Preview State */}
         {parsedPreview && (
-          <div className="p-4 rounded-lg bg-space-850 border border-emerald-800/80 text-xs space-y-2">
-            <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+          <div className="p-4 rounded-sm bg-[#F0FDF4] border border-[#BBF7D0] text-xs space-y-2 text-[#166534]">
+            <div className="flex items-center gap-2 font-bold text-[#15803D]">
               <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
               <span>Valid Role 1 Dataset Verified</span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-slate-300 font-mono">
+            <div className="grid grid-cols-2 gap-2 font-mono text-xs">
               <div>Series Length: {parsedPreview.series.length} months</div>
               <div>Valid Months: {parsedPreview.metadata.valid_months}</div>
               <div>Missing Months: {parsedPreview.metadata.missing_months}</div>
@@ -238,11 +238,11 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         )}
 
         {/* Modal Action Buttons */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+        <div className="flex items-center justify-between pt-3 border-t border-[#E0E0E0]">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            className="px-4 py-2 rounded-sm text-xs font-semibold text-[#58585B] hover:text-[#1B1B1B] hover:bg-[#F0F0F0] transition-colors"
           >
             Cancel
           </button>
@@ -250,7 +250,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             type="button"
             disabled={!parsedPreview}
             onClick={handleApply}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 disabled:text-slate-600 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-wider bg-[#1967D2] hover:bg-[#1557B0] disabled:bg-[#D1D5DB] disabled:text-[#9CA3AF] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#1967D2]"
           >
             <FileText className="w-4 h-4" aria-hidden="true" />
             Apply to {targetVariable} Analysis

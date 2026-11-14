@@ -3,17 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    color-scheme: dark;
-  }
-
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 4.5rem;
   }
 
   body {
-    @apply bg-space-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-sky-500/30 selection:text-sky-200;
+    @apply bg-earthdata-bg text-earthdata-text font-body antialiased min-h-screen selection:bg-earthdata-blue/20 selection:text-earthdata-blue;
   }
 
   /* R-39: cursor pointer on interactive elements, not-allowed on disabled */
@@ -37,7 +33,7 @@
 
   /* Custom focus outline for R-32 Keyboard Accessibility */
   :focus-visible {
-    outline: 2px solid #38bdf8;
+    outline: 2px solid #1967D2;
     outline-offset: 2px;
   }
 }

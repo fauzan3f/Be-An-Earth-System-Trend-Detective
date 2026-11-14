@@ -45,11 +45,13 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   isDailyView = false,
 }) => {
   const isCyan = colorScheme === "cyan";
-  const primaryColor = isCyan ? "#38bdf8" : "#fbbf24";
+  // NASA Earthdata palette: NO2 uses NASA Cobalt Blue #0072BC; AOD uses Earthdata Amber #D97706
+  const primaryColor = isCyan ? "#0072BC" : "#D97706";
   const primaryBg = isCyan
-    ? "rgba(56, 189, 248, 0.12)"
-    : "rgba(251, 191, 36, 0.12)";
-  const trendlineColor = isCyan ? "#a78bfa" : "#34d399";
+    ? "rgba(0, 114, 188, 0.08)"
+    : "rgba(217, 119, 6, 0.08)";
+  // Trendline: NASA Red #E4002B for NO2; Emerald Green #059669 for AOD
+  const trendlineColor = isCyan ? "#E4002B" : "#059669";
 
   const labels = dataPoints.map((d) => d.date);
   const values = dataPoints.map((d) => d.value);
@@ -64,13 +66,13 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
       data: values,
       borderColor: primaryColor,
       backgroundColor: primaryBg,
-      borderWidth: isDailyView ? 1.2 : 2,
+      borderWidth: isDailyView ? 1.2 : 2.2,
       pointRadius: isDailyView ? 0 : 2.5,
       pointHoverRadius: isDailyView ? 3 : 5,
       pointBackgroundColor: primaryColor,
-      pointBorderColor: "#0f172a",
-      pointBorderWidth: 1,
-      tension: isDailyView ? 0 : 0.15,
+      pointBorderColor: "#FFFFFF",
+      pointBorderWidth: 1.5,
+      tension: isDailyView ? 0 : 0.1,
       spanGaps: false, // Visual gaps for missing days/months
       fill: false,
     },
@@ -81,7 +83,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
       label: "Sen's Slope Trendline",
       data: trendlinePoints,
       borderColor: trendlineColor,
-      borderWidth: 2.5,
+      borderWidth: 2.2,
       borderDash: [6, 4],
       pointRadius: 0,
       pointHoverRadius: 0,
@@ -99,7 +101,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
     responsive: true,
     maintainAspectRatio: false,
     animation: {
-      duration: isDailyView ? 0 : 350,
+      duration: isDailyView ? 0 : 300,
     },
     interaction: {
       mode: "index",
@@ -108,25 +110,26 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
     plugins: {
       legend: {
         position: "top" as const,
+        align: "end" as const,
         labels: {
-          color: "#cbd5e1",
+          color: "#1B1B1B",
           font: {
-            family: "Inter, sans-serif",
+            family: "Public Sans, sans-serif",
             size: 11,
-            weight: 500,
+            weight: 600,
           },
           boxWidth: 14,
           padding: 12,
         },
       },
       tooltip: {
-        backgroundColor: "#0f172a",
-        titleColor: "#f8fafc",
-        bodyColor: "#94a3b8",
-        borderColor: "#334155",
+        backgroundColor: "#0B0D10",
+        titleColor: "#FFFFFF",
+        bodyColor: "#E0E0E0",
+        borderColor: "#333333",
         borderWidth: 1,
         padding: 10,
-        cornerRadius: 6,
+        cornerRadius: 3,
         callbacks: {
           label: (context) => {
             const rawVal = context.raw as number | null;
@@ -142,27 +145,30 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
     scales: {
       x: {
         grid: {
-          color: "rgba(51, 65, 85, 0.35)",
+          color: "#F0F0F0",
         },
         ticks: {
-          color: "#94a3b8",
+          color: "#58585B",
           font: {
-            family: "JetBrains Mono, monospace",
+            family: "DM Mono, monospace",
             size: 10,
           },
           maxTicksLimit: isDailyView ? 10 : 14,
           maxRotation: 45,
           minRotation: 0,
         },
+        border: {
+          color: "#E0E0E0",
+        },
       },
       y: {
         grid: {
-          color: "rgba(51, 65, 85, 0.35)",
+          color: "#F0F0F0",
         },
         ticks: {
-          color: "#94a3b8",
+          color: "#58585B",
           font: {
-            family: "JetBrains Mono, monospace",
+            family: "DM Mono, monospace",
             size: 10,
           },
           callback: (tickVal) => {
@@ -172,17 +178,22 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         title: {
           display: true,
           text: unit,
-          color: "#94a3b8",
+          color: "#58585B",
           font: {
+            family: "Public Sans, sans-serif",
             size: 11,
+            weight: 600,
           },
+        },
+        border: {
+          color: "#E0E0E0",
         },
       },
     },
   };
 
   return (
-    <div className="relative w-full h-72 sm:h-80 md:h-88 pt-2">
+    <div className="relative w-full h-72 sm:h-80 md:h-88 pt-2 bg-white">
       <Line data={chartData} options={options} />
     </div>
   );
