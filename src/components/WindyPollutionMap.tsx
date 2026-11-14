@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import type { MonthlyDataPoint } from "../types";
 import { formatScientificValue } from "../utils/formatters";
@@ -35,30 +36,67 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
     east: 114.0,
   };
 
+  // Coordinates across West Kalimantan for geographically anchored plume rendering
+  const plumeCenters = [
+    { lat: -0.02, lon: 109.34 }, // Pontianak & Kapuas estuary
+    { lat: -1.85, lon: 109.97 }, // Ketapang & Southern Peatlands
+    { lat: 0.06, lon: 111.50 },  // Sintang & Central River Basin
+    { lat: 0.91, lon: 108.99 },  // Singkawang / Bengkayang coastal zone
+    { lat: -0.80, lon: 110.80 }, // Central West Kalimantan interior
+    { lat: -2.30, lon: 110.60 }, // Kendawangan peat dome
+    { lat: 0.50, lon: 112.50 },  // Upper Kapuas / Putussibau transition
+    { lat: -1.20, lon: 112.20 }, // Schwaner range foothills
+  ];
+
   const currentPoint = series[activeIndex] || series[0] || { date: "2010-11", value: null };
   const rawValue = currentPoint?.value ?? 0;
 
-  // Categorize pollution / optical density intensity
+  // Exact color mapping requested:
+  // Low (< 4.5e14): Cyan/Teal (rgba(56, 189, 248) to rgba(16, 185, 129))
+  // Moderate (4.5e14 - 6.5e14): Warm Yellow/Amber (rgba(250, 204, 21) to rgba(245, 158, 11))
+  // High / Severe (> 6.5e14): Intense Orange to Deep Red (rgba(234, 88, 12) to rgba(220, 38, 38))
   const getEpisodeSeverity = (val: number | null) => {
-    if (val === null || val === 0) return { label: "Missing / Fill Value", color: "#71717A", glowRgba: "rgba(113, 113, 122, 0.2)" };
-    if (val < 4.0e14) return { label: "Baseline / Clean Atmosphere", color: "#3B82F6", glowRgba: "rgba(59, 130, 246, 0.35)" };
-    if (val < 7.5e14) return { label: "Moderate Column Loading", color: "#F59E0B", glowRgba: "rgba(245, 158, 11, 0.45)" };
-    return { label: "Severe Smoke & Combustion Episode", color: "#E4002B", glowRgba: "rgba(228, 0, 43, 0.65)" };
+    if (val === null || val === 0) {
+      return {
+        label: "Missing / Fill Value",
+        color: "#71717A",
+        glowRgba: "rgba(113, 113, 122, 0.2)",
+      };
+    }
+    if (val < 4.5e14) {
+      return {
+        label: "Baseline / Clean Atmosphere",
+        color: "#38BDF8",
+        glowRgba: "rgba(56, 189, 248, 0.35)",
+      };
+    }
+    if (val <= 6.5e14) {
+      return {
+        label: "Moderate Column Loading",
+        color: "#F59E0B",
+        glowRgba: "rgba(245, 158, 11, 0.55)",
+      };
+    }
+    return {
+      label: "Severe Smoke & Combustion Episode",
+      color: "#DC2626",
+      glowRgba: "rgba(220, 38, 38, 0.75)",
+    };
   };
 
   const severity = getEpisodeSeverity(rawValue);
 
-  // Initialize Leaflet Map
+  // Initialize Leaflet Map (Bright Satellite Imagery + High-Contrast Labels)
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (mapInstanceRef.current) return;
 
-    // Center on West Kalimantan, Indonesia
+    // Center directly on West Kalimantan, Indonesia
     const map = L.map(mapContainerRef.current, {
       center: [-0.5, 111.0],
       zoom: 6,
       minZoom: 5,
-      maxZoom: 10,
+      maxZoom: 9,
       zoomControl: false,
       attributionControl: false,
     });
@@ -66,7 +104,7 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
     // Add zoom control to top-right
     L.control.zoom({ position: "topright" }).addTo(map);
 
-    // 1. Esri World Imagery (High-res satellite base)
+    // 1. Esri World Imagery (Bright, high-contrast satellite base layer)
     L.tileLayer(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       {
@@ -75,30 +113,16 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
       }
     ).addTo(map);
 
-    // 2. Esri Boundaries and Places (City labels and national/provincial borders)
+    // 2. Esri Boundaries and Places (Crisp white city labels and borders on satellite tiles)
     L.tileLayer(
       "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
       {
         maxZoom: 17,
-        opacity: 0.85,
+        opacity: 0.95,
       }
     ).addTo(map);
 
-    // 3. Draw Study Bounding Box Rectangle (108°E - 114°E, 3.5°S - 2.5°N)
-    const bounds: L.LatLngBoundsExpression = [
-      [bbox.south, bbox.west],
-      [bbox.north, bbox.east],
-    ];
-
-    L.rectangle(bounds, {
-      color: "#FFFFFF",
-      weight: 1.8,
-      dashArray: "6, 6",
-      fillColor: "transparent",
-      fillOpacity: 0.1,
-    }).addTo(map);
-
-    // Geographic City Markers for context
+    // City markers for immediate spatial orientation
     const cities = [
       { name: "Pontianak", lat: -0.0263, lon: 109.3425 },
       { name: "Ketapang", lat: -1.8488, lon: 109.9722 },
@@ -110,7 +134,7 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
       const icon = L.divIcon({
         className: "custom-city-marker",
         html: `<div style="display:flex;align-items:center;gap:4px;">
-          <div style="width:6px;height:6px;border-radius:50%;background:#FFFFFF;border:1.5px solid #000000;"></div>
+          <div style="width:6px;height:6px;border-radius:50%;background:#FFFFFF;border:1.5px solid #000000;box-shadow:0 0 3px rgba(0,0,0,0.8);"></div>
           <span style="font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:#FFFFFF;text-shadow:0 1px 3px rgba(0,0,0,0.9);letter-spacing:0.05em;">${c.name.toUpperCase()}</span>
         </div>`,
         iconSize: [80, 20],
@@ -127,7 +151,7 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
     };
   }, []);
 
-  // Atmospheric Particle Flow and Plume Overlay Canvas
+  // Geographically Anchored Heatmap Plume & Non-Clustering Wind Streamlines
   useEffect(() => {
     const canvas = canvasRef.current;
     const map = mapInstanceRef.current;
@@ -138,124 +162,147 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
 
     let isRunning = true;
 
-    // Particle system (Windy.com-inspired streamlines)
-    const numParticles = 140;
-    interface Particle {
+    // Particle streamlines setup (uniformly distributed across entire map viewport)
+    const numParticles = 95;
+    interface Streamline {
       x: number;
       y: number;
       speed: number;
-      life: number;
-      maxLife: number;
-      size: number;
+      length: number;
+      age: number;
+      maxAge: number;
     }
 
-    const particles: Particle[] = [];
+    const streamlines: Streamline[] = [];
 
-    const resetParticle = (p: Partial<Particle> = {}): Particle => {
-      return {
-        x: p.x ?? Math.random() * canvas.width,
-        y: p.y ?? Math.random() * canvas.height,
-        speed: 0.8 + Math.random() * 1.6,
-        life: 0,
-        maxLife: 60 + Math.random() * 80,
-        size: 1 + Math.random() * 1.5,
-      };
-    };
+    const createRandomStreamline = (): Streamline => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      speed: 0.9 + Math.random() * 1.4,
+      length: 12 + Math.random() * 18,
+      age: Math.floor(Math.random() * 40),
+      maxAge: 45 + Math.random() * 55,
+    });
 
     const resizeCanvas = () => {
       if (!canvas || !mapContainerRef.current) return;
       canvas.width = mapContainerRef.current.clientWidth;
       canvas.height = mapContainerRef.current.clientHeight;
 
-      particles.length = 0;
+      streamlines.length = 0;
       for (let i = 0; i < numParticles; i++) {
-        particles.push(resetParticle());
+        streamlines.push(createRandomStreamline());
       }
     };
 
     resizeCanvas();
     map.on("resize", resizeCanvas);
-    map.on("move", () => {});
 
     // Animation Loop
     const render = () => {
       if (!isRunning) return;
 
-      // Semi-transparent fade for motion trail
-      ctx.fillStyle = "rgba(11, 13, 16, 0.18)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // CRITICAL: Fully clear canvas on every frame so underlying satellite map is 100% bright and visible!
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // 1. Calculate screen coordinates of West Kalimantan Bounding Box
       const nw = map.latLngToContainerPoint([bbox.north, bbox.west]);
       const se = map.latLngToContainerPoint([bbox.south, bbox.east]);
       const boxWidth = se.x - nw.x;
       const boxHeight = se.y - nw.y;
-      const centerX = nw.x + boxWidth / 2;
-      const centerY = nw.y + boxHeight / 2;
-      const radius = Math.max(boxWidth, boxHeight) * 0.65;
 
-      // 2. Render Radial Atmospheric Column Density Plume
-      if (radius > 10 && rawValue > 0) {
-        const gradient = ctx.createRadialGradient(
-          centerX,
-          centerY,
-          radius * 0.1,
-          centerX,
-          centerY,
-          radius
-        );
-
-        if (rawValue < 4.0e14) {
-          gradient.addColorStop(0, "rgba(59, 130, 246, 0.38)");
-          gradient.addColorStop(0.5, "rgba(16, 185, 129, 0.22)");
-          gradient.addColorStop(1, "rgba(59, 130, 246, 0.0)");
-        } else if (rawValue < 7.5e14) {
-          gradient.addColorStop(0, "rgba(245, 158, 11, 0.48)");
-          gradient.addColorStop(0.6, "rgba(234, 88, 12, 0.25)");
-          gradient.addColorStop(1, "rgba(245, 158, 11, 0.0)");
-        } else {
-          // Intense Fire Season Peak: Deep Crimson Smoke
-          gradient.addColorStop(0, "rgba(228, 0, 43, 0.65)");
-          gradient.addColorStop(0.4, "rgba(220, 38, 38, 0.45)");
-          gradient.addColorStop(0.75, "rgba(185, 28, 28, 0.25)");
-          gradient.addColorStop(1, "rgba(153, 27, 27, 0.0)");
-        }
-
+      // 2. Geographically Anchored Pollution Plume (Clipped inside study box)
+      if (boxWidth > 20 && boxHeight > 20 && rawValue > 0) {
         ctx.save();
-        ctx.fillStyle = gradient;
+
+        // Clip strictly to the West Kalimantan study bounding box
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.rect(nw.x, nw.y, boxWidth, boxHeight);
+        ctx.clip();
+
+        const plumeRadius = Math.max(boxWidth, boxHeight) * 0.38;
+
+        // Render multi-point soft atmospheric heat plumes anchored to real coordinates
+        plumeCenters.forEach((center) => {
+          const pt = map.latLngToContainerPoint([center.lat, center.lon]);
+
+          const gradient = ctx.createRadialGradient(
+            pt.x,
+            pt.y,
+            plumeRadius * 0.1,
+            pt.x,
+            pt.y,
+            plumeRadius
+          );
+
+          if (rawValue < 4.5e14) {
+            // Low / Clean Atmosphere: Soft translucent Cyan/Teal
+            gradient.addColorStop(0, "rgba(56, 189, 248, 0.32)");
+            gradient.addColorStop(0.5, "rgba(16, 185, 129, 0.22)");
+            gradient.addColorStop(1, "rgba(56, 189, 248, 0.0)");
+          } else if (rawValue <= 6.5e14) {
+            // Moderate Column Loading: Warm Yellow/Amber
+            gradient.addColorStop(0, "rgba(250, 204, 21, 0.50)");
+            gradient.addColorStop(0.5, "rgba(245, 158, 11, 0.32)");
+            gradient.addColorStop(1, "rgba(250, 204, 21, 0.0)");
+          } else {
+            // High / Severe Fire Peak Episode: Intense Orange to Deep Red
+            gradient.addColorStop(0, "rgba(234, 88, 12, 0.68)");
+            gradient.addColorStop(0.45, "rgba(220, 38, 38, 0.50)");
+            gradient.addColorStop(0.8, "rgba(153, 27, 27, 0.25)");
+            gradient.addColorStop(1, "rgba(220, 38, 38, 0.0)");
+          }
+
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, plumeRadius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.restore();
+
+        // Draw crisp dashed bounding-box border
+        ctx.save();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([6, 6]);
+        ctx.strokeRect(nw.x, nw.y, boxWidth, boxHeight);
         ctx.restore();
       }
 
-      // 3. Render Drifting Atmospheric Particles (East to West Equatorial Drift)
-      particles.forEach((p) => {
-        p.life += 1;
-        p.x -= p.speed * 1.2; // Move westward
-        p.y += Math.sin(p.x * 0.015) * 0.4; // Subtle sinusoidal drift
+      // 3. Render Subtle Wind Streamlines (No Right-Edge Clustering)
+      ctx.save();
+      ctx.lineWidth = 1.4;
 
-        // Re-spawn if particle expires or exits canvas
-        if (p.life > p.maxLife || p.x < 0 || p.y < 0 || p.y > canvas.height) {
-          Object.assign(p, resetParticle({ x: canvas.width + Math.random() * 20 }));
+      streamlines.forEach((p) => {
+        p.age += 1;
+        p.x -= p.speed * 1.4; // Drift westward (equatorial trade wind vector)
+        p.y += Math.sin(p.x * 0.02) * 0.35;
+
+        // If streamline expires or moves out of canvas, respawn at a RANDOM point anywhere on the map!
+        if (p.age >= p.maxAge || p.x < -30 || p.y < -30 || p.y > canvas.height + 30) {
+          p.x = Math.random() * canvas.width;
+          p.y = Math.random() * canvas.height;
+          p.age = 0;
+          p.maxAge = 45 + Math.random() * 55;
         }
 
-        // Particle opacity fades in and out gracefully
-        const progress = p.life / p.maxLife;
-        const opacity = progress < 0.2 ? progress / 0.2 : 1 - (progress - 0.2) / 0.8;
+        // Opacity smoothly fades in and out with age
+        const progress = p.age / p.maxAge;
+        const opacity =
+          progress < 0.25
+            ? (progress / 0.25) * 0.45
+            : (1 - (progress - 0.25) / 0.75) * 0.45;
 
-        // Particle color responds to pollution intensity
-        ctx.fillStyle =
-          rawValue > 7.5e14
-            ? `rgba(254, 202, 202, ${opacity * 0.85})`
-            : rawValue > 4.0e14
-            ? `rgba(254, 240, 138, ${opacity * 0.75})`
-            : `rgba(224, 242, 254, ${opacity * 0.65})`;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, opacity)})`;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(p.x + p.length, p.y);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
       });
+
+      ctx.restore();
 
       animFrameIdRef.current = requestAnimationFrame(render);
     };
@@ -316,11 +363,11 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
       {/* Map Viewport Container */}
       <div
         ref={mapContainerRef}
-        className="w-full h-[420px] sm:h-[480px] lg:h-[540px] relative z-0 bg-[#0B0D10]"
+        className="w-full h-[440px] sm:h-[500px] lg:h-[560px] relative z-0 bg-[#0B0D10]"
         aria-label="Interactive Satellite Pollution Map for West Kalimantan"
       />
 
-      {/* Atmospheric Canvas Layer */}
+      {/* Atmospheric Canvas Layer (100% Transparent, Never Obscures Map) */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 z-[400] pointer-events-none"
@@ -430,21 +477,21 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
           </div>
         </div>
 
-        {/* Row 3: Continuous Windy.com-Style Color Scale Gradient Bar */}
+        {/* Row 3: Continuous Color Scale Gradient Bar */}
         <div className="pt-1 space-y-1">
           <div className="flex items-center justify-between text-[10px] font-mono text-[#71717A]">
-            <span>3.0e+14 (CLEAN)</span>
-            <span>5.0e+14</span>
-            <span>7.5e+14 (ELEVATED)</span>
+            <span>3.0e+14 (CLEAN CYAN)</span>
+            <span>4.5e+14 (THRESHOLD)</span>
+            <span>6.5e+14 (AMBER HAZE)</span>
             <span>1.0e+15</span>
-            <span className="text-[#E4002B] font-bold">1.35e+15 (SEVERE PEAK)</span>
+            <span className="text-[#E4002B] font-bold">1.35e+15 (SEVERE RED)</span>
           </div>
 
           <div
             className="w-full h-2 rounded-sm shadow-inner"
             style={{
               background:
-                "linear-gradient(to right, #3B82F6 0%, #06B6D4 25%, #10B981 40%, #F59E0B 65%, #EA580C 85%, #E4002B 100%)",
+                "linear-gradient(to right, #38BDF8 0%, #10B981 25%, #FACC15 50%, #F59E0B 65%, #EA580C 80%, #DC2626 100%)",
             }}
           />
         </div>
