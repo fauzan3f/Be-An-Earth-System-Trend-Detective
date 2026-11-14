@@ -119,7 +119,7 @@ export const ScientificFooter: React.FC<ScientificFooterProps> = ({ onOpenGlossa
           <span>Earth System Trend Detective · 2026 NASA Space Apps Challenge</span>
         </div>
         <div>
-          <span>Role 2 (Web &amp; Visualization) &amp; Role 1 (Data &amp; Statistical Analysis) Integration</span>
+          <span>Atmospheric Science Data &amp; Web Visualization Platform</span>
         </div>
       </div>
     </footer>

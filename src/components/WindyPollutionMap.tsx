@@ -345,7 +345,7 @@ export const WindyPollutionMap: React.FC<WindyPollutionMapProps> = ({
   );
 
   return (
-    <div className="relative w-full rounded-sm overflow-hidden border border-[rgba(255,255,255,0.15)] bg-[#000000] shadow-2xl">
+    <div className="relative z-10 isolate w-full rounded-sm overflow-hidden border border-[rgba(255,255,255,0.15)] bg-[#000000] shadow-2xl">
       {/* Top Glassmorphic Scientific Integrity Badge */}
       <div className="absolute top-3 left-3 z-[1000] max-w-sm sm:max-w-md p-2.5 rounded-sm bg-[rgba(11,13,16,0.85)] backdrop-blur-md border border-[rgba(255,255,255,0.15)] text-white shadow-xl pointer-events-auto">
         <div className="flex items-center gap-2 mb-1">

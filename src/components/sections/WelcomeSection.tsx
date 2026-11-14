@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowDown, Satellite, MapPin, Calculator, ShieldCheck } from "lucide-react";
+import { ArrowDown, Satellite, MapPin, Calculator } from "lucide-react";
 import { AnimatedCounter } from "../AnimatedCounter";
 
 interface WelcomeSectionProps {
@@ -16,11 +16,6 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onStartExploring
       {/* Top Countdown-Style Telemetry Strip (NASA Brand Blue #15418C) */}
       <div className="bg-[#15418C] text-white border-b border-[#0E2A5C] px-4 py-2.5 text-xs">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 font-mono">
-          <div className="flex items-center gap-2 text-[11px] font-semibold tracking-wider uppercase text-[#E4E4E7]">
-            <ShieldCheck className="w-3.5 h-3.5 text-white" aria-hidden="true" />
-            <span>NASA Space Apps Challenge 2026 : Earth System Trend Detective</span>
-          </div>
-
           {/* Telemetry Scope Numbers with Animated Counters */}
           <div className="flex items-center gap-4 text-center">
             <div className="flex items-baseline gap-1.5">

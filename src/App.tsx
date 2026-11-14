@@ -77,6 +77,18 @@ export function App() {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState<boolean>(false);
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
 
+  // Lock page scroll when any modal is open
+  useEffect(() => {
+    if (isUploadOpen || isGlossaryOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isUploadOpen, isGlossaryOpen]);
+
   // Slice NO2 monthly series according to active year range
   const filteredNo2MonthlySeries: MonthlyDataPoint[] = useMemo(() => {
     if (!no2Dataset) return [];
@@ -406,7 +418,7 @@ export function App() {
         onClose={() => setIsGlossaryOpen(false)}
       />
 
-      {/* Load Role 1 CSV/JSON Data Modal */}
+      {/* Import Custom Satellite Dataset Modal */}
       <UploadModal
         isOpen={isUploadOpen}
         onClose={() => setIsUploadOpen(false)}

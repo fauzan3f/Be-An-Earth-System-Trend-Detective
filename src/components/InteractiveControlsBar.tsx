@@ -128,16 +128,16 @@ export const InteractiveControlsBar: React.FC<InteractiveControlsBarProps> = ({
             <span>Export AOD CSV</span>
           </button>
 
-          {/* Load Role 1 Data Modal Trigger */}
+          {/* Import Dataset Modal Trigger */}
           <button
             type="button"
             onClick={onOpenUploadModal}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-900/60 hover:bg-sky-850 border border-sky-700/80 text-sky-200 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400"
-            title="Upload new CSV or JSON datasets provided by Role 1"
-            aria-label="Load Role 1 CSV or JSON Data"
+            title="Import custom NASA Giovanni CSV or JSON datasets"
+            aria-label="Import Custom CSV or JSON Dataset"
           >
             <Upload className="w-3.5 h-3.5 text-sky-300" aria-hidden="true" />
-            <span>Load Role 1 Data</span>
+            <span>Import Dataset</span>
           </button>
 
           {/* Reset Defaults button */}

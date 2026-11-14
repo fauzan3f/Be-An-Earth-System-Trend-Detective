@@ -201,7 +201,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           <div className="space-y-1">
             <h4 className="text-sm font-bold text-[#1B1B1B] flex items-center gap-2">
               <Database className="w-4 h-4 text-[#1B1B1B]" aria-hidden="true" />
-              Role 1 Official Handoff Data Files &amp; Export Utilities
+              NASA Giovanni &amp; Analysis Data Files &amp; Export Utilities
             </h4>
             <p className="text-xs text-[#58585B]">
               Verified datasets, statistical audit tables, and synthesis packages
@@ -233,7 +233,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-semibold bg-[#1B1B1B] hover:bg-[#000000] text-white transition-colors"
             >
               <Upload className="w-3.5 h-3.5 text-white" aria-hidden="true" />
-              <span>Load Role 1 Data</span>
+              <span>Import Dataset</span>
             </button>
 
             <button
@@ -247,7 +247,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           </div>
         </div>
 
-        {/* Direct Download Links for Role 1 Artifacts */}
+        {/* Direct Download Links for Analysis Artifacts */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
           <button
             type="button"

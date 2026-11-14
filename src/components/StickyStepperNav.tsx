@@ -122,11 +122,11 @@ export const StickyStepperNav: React.FC<StickyStepperNavProps> = ({
             type="button"
             onClick={onOpenUpload}
             className="px-3 py-1.5 rounded-sm text-xs font-medium bg-[#12151B] hover:bg-[#27272A] text-white border border-[rgba(255,255,255,0.15)] transition-colors flex items-center gap-1.5 shadow-sm"
-            title="Load custom Role 1 CSV or JSON data"
-            aria-label="Load Role 1 Data"
+            title="Import custom NASA Giovanni CSV or JSON dataset"
+            aria-label="Import Dataset"
           >
             <Upload className="w-3.5 h-3.5 text-white" aria-hidden="true" />
-            <span>Role 1 Files</span>
+            <span>Import Dataset</span>
           </button>
 
           <button
