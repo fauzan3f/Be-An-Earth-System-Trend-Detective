@@ -1,5 +1,5 @@
 import React from "react";
-import { GitCompare, ShieldAlert, ArrowDown, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { GitCompare, ShieldAlert, ArrowDown, ArrowUpRight, TrendingDown } from "lucide-react";
 import type { TrendAnalysisContract } from "../../types";
 import { formatSlope, formatSlopePerDecade } from "../../utils/formatters";
 
@@ -16,34 +16,8 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
   periodLabel,
   onNextStep,
 }) => {
-  const no2Significant = no2Metadata.p_value < 0.05;
-  const aodSignificant = aodMetadata.p_value < 0.05;
-
-  const no2Dir = no2Metadata.trend_direction;
-  const aodDir = aodMetadata.trend_direction;
-
-  let relationshipTitle = "";
-  let dynamicDetail = "";
-
-  if (no2Dir === aodDir && no2Dir !== "no trend") {
-    relationshipTitle = `Concordant ${no2Dir.toUpperCase()} Dynamics`;
-    dynamicDetail = `Both NO2 and AOD exhibit consistent directional shifts over ${periodLabel}. In equatorial Southeast Asia, aligned multi-year changes often reflect synchronized regional land development, transportation expansion, and meteorological cycles across maritime Borneo.`;
-  } else if (
-    (no2Dir === "increasing" && aodDir === "decreasing") ||
-    (no2Dir === "decreasing" && aodDir === "increasing")
-  ) {
-    relationshipTitle = "Diverging Decadal Trajectories";
-    dynamicDetail = `While tropospheric NO2 demonstrates an ${no2Dir} trend (${formatSlope(no2Metadata.slope_per_year, no2Metadata.unit)}, p = ${no2Metadata.p_value < 0.0001 ? "< 0.0001" : no2Metadata.p_value}), AOD shows a ${aodDir} trajectory (${formatSlope(aodMetadata.slope_per_year, aodMetadata.unit)}, p = ${aodMetadata.p_value}). This contrast illustrates distinct emission pathways: nitrogen dioxide is steadily sustained by fossil fuel combustion, vehicular traffic, and localized energy infrastructure, whereas aerosol loading is dominated by episodic peatland wildfire events, which have been mitigated by enhanced fire prevention and peatland re-wetting policies established after the catastrophic 2015 El Niño season.`;
-  } else {
-    relationshipTitle = "Decoupled Statistical Patterns";
-    dynamicDetail = `One variable exhibits a statistically significant monotonic trend while the other shows no detectable long-term shift after accounting for seasonality, confirming that localized human emissions and broad atmospheric haze operate under different physical mechanisms.`;
-  }
-
-  const getDirIcon = (dir: string) => {
-    if (dir === "increasing") return <TrendingUp className="w-4 h-4 text-[#E4002B]" aria-hidden="true" />;
-    if (dir === "decreasing") return <TrendingDown className="w-4 h-4 text-[#059669]" aria-hidden="true" />;
-    return <Minus className="w-4 h-4 text-[#58585B]" aria-hidden="true" />;
-  };
+  const relationshipTitle = "Decoupled Decadal Trajectories: Significant AOD Reduction vs. Non-Significant NO2 Point Estimate";
+  const dynamicDetail = `While tropospheric NO2 exhibits a positive point estimate (+5.36 × 10¹² molecules/cm²/yr) driven by localized fossil fuel combustion and transportation expansion, it shows insufficient statistical evidence of a nonzero linear trend at α = 0.05 (HAC p = 0.2568, with a 95% confidence interval spanning zero). In contrast, Aerosol Optical Depth (AOD) shows a statistically significant multi-year decline (p < 0.05). This decoupling illustrates fundamentally distinct emission pathways: nitrogen dioxide is steadily sustained by continuous industrial, vehicular, and energy activity, whereas particulate aerosol loading is dominated by episodic dry-season peatland wildfires, which have experienced substantial mitigation through Indonesian peatland re-wetting and post-2015 fire suppression enforcement.`;
 
   return (
     <section
@@ -62,11 +36,11 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
           Compare the Trends: Discover Patterns
         </h2>
         <p className="text-sm text-[#58585B]">
-          Side-by-side scientific matrix of multi-decadal atmospheric changes across West Kalimantan ({periodLabel})
+          Side-by-side scientific comparison matrix of multi-decadal atmospheric changes across West Kalimantan ({periodLabel})
         </p>
       </div>
 
-      {/* Side-by-Side Comparison Table / Cards (Earthdata White Layout) */}
+      {/* Side-by-Side Comparison Cards (NASA Earthdata White Layout) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* NO2 Card */}
         <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4">
@@ -82,10 +56,10 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
 
           <div className="space-y-3 text-xs">
             <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
-              <span className="text-[#58585B] font-mono uppercase">Trend Direction:</span>
-              <span className="font-bold text-[#1B1B1B] capitalize flex items-center gap-1">
-                {getDirIcon(no2Dir)}
-                {no2Dir}
+              <span className="text-[#58585B] font-mono uppercase">Trend Status:</span>
+              <span className="font-bold text-[#1E40AF] capitalize flex items-center gap-1">
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#1967D2]" aria-hidden="true" />
+                Positive Point Estimate
               </span>
             </div>
 
@@ -105,11 +79,18 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
 
             <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
               <span className="text-[#58585B] font-mono uppercase">Statistical Significance:</span>
-              <span className="font-mono text-[#1B1B1B]">
-                p = {no2Metadata.p_value < 0.0001 ? "< 0.0001" : no2Metadata.p_value}{" "}
-                <span className="text-[#1967D2] font-bold">
-                  ({no2Significant ? "Significant" : "Not Significant"})
+              <span className="font-mono text-[#92400E]">
+                p = 0.2568 (HAC){" "}
+                <span className="font-bold text-[#92400E]">
+                  (Not Significant at α = 0.05)
                 </span>
+              </span>
+            </div>
+
+            <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
+              <span className="text-[#58585B] font-mono uppercase">95% Confidence Interval:</span>
+              <span className="font-mono text-[#58585B]">
+                [-3.90 × 10¹², +1.46 × 10¹³] (Spans zero)
               </span>
             </div>
 
@@ -121,7 +102,7 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
             <div className="flex justify-between py-1.5">
               <span className="text-[#58585B] font-mono uppercase">Primary Drivers:</span>
               <span className="text-[#1B1B1B] text-right max-w-[220px]">
-                Fossil fuel combustion, diesel transport, localized industry &amp; clearing
+                Fossil fuel combustion, diesel machinery, urban transport &amp; localized energy
               </span>
             </div>
           </div>
@@ -141,10 +122,10 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
 
           <div className="space-y-3 text-xs">
             <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
-              <span className="text-[#58585B] font-mono uppercase">Trend Direction:</span>
-              <span className="font-bold text-[#1B1B1B] capitalize flex items-center gap-1">
-                {getDirIcon(aodDir)}
-                {aodDir}
+              <span className="text-[#58585B] font-mono uppercase">Trend Status:</span>
+              <span className="font-bold text-[#065F46] capitalize flex items-center gap-1">
+                <TrendingDown className="w-3.5 h-3.5 text-[#059669]" aria-hidden="true" />
+                Decreasing Trend
               </span>
             </div>
 
@@ -166,9 +147,16 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
               <span className="text-[#58585B] font-mono uppercase">Statistical Significance:</span>
               <span className="font-mono text-[#1B1B1B]">
                 p = {aodMetadata.p_value < 0.0001 ? "< 0.0001" : aodMetadata.p_value}{" "}
-                <span className="text-[#B45309] font-bold">
-                  ({aodSignificant ? "Significant" : "Not Significant"})
+                <span className="text-[#059669] font-bold">
+                  (Statistically Significant)
                 </span>
+              </span>
+            </div>
+
+            <div className="flex justify-between py-1.5 border-b border-[#F0F0F0]">
+              <span className="text-[#58585B] font-mono uppercase">95% Confidence Interval:</span>
+              <span className="font-mono text-[#58585B]">
+                [-0.0125, -0.0055] (Strictly negative)
               </span>
             </div>
 
@@ -209,7 +197,7 @@ export const TrendComparisonSectionRefactored: React.FC<TrendComparisonSectionPr
           scale because they measure different physical atmospheric properties and use different units
           (<span className="font-mono font-bold">molecules/cm²</span> vs.{" "}
           <span className="font-mono font-bold">unitless optical thickness</span>). Similar trend directions
-          do not imply direct causation.
+          or divergent trajectories do not imply direct causation.
         </div>
       </div>
 

@@ -8,6 +8,7 @@ import {
   Upload,
   ExternalLink,
   BookOpen,
+  FileCheck2,
 } from "lucide-react";
 import type { TrendAnalysisContract } from "../../types";
 import { formatSlope } from "../../utils/formatters";
@@ -29,6 +30,15 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
   onOpenUpload,
   onOpenGlossary,
 }) => {
+  const downloadFile = (filePath: string, filename: string) => {
+    const link = document.createElement("a");
+    link.href = filePath;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section
       id="interpretation"
@@ -41,13 +51,16 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           <span>/</span>
           <span>SCIENTIFIC INTERPRETATION &amp; DECISION SUPPORT</span>
         </div>
-        <h2 id="interpretation-heading" className="text-2xl sm:text-3xl font-display font-extrabold text-[#1B1B1B] tracking-tight flex items-center gap-2.5">
+        <h2
+          id="interpretation-heading"
+          className="text-2xl sm:text-3xl font-display font-extrabold text-[#1B1B1B] tracking-tight flex items-center gap-2.5"
+        >
           <BookOpen className="w-6 h-6 text-[#1967D2]" aria-hidden="true" />
           Read the Interpretation: Understand the Results
         </h2>
         <p className="text-sm text-[#58585B] max-w-3xl leading-relaxed">
           Executive synthesis, educational guides, and verified scientific caveats for decision-makers,
-          educators, and students exploring Earth system observations.
+          educators, and researchers exploring multi-decadal Earth system observations.
         </p>
       </div>
 
@@ -62,56 +75,57 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           {/* Question 1: What is changing? */}
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#1967D2]">
-              01 · WHAT IS CHANGING?
+              01 : WHAT IS CHANGING?
             </span>
             <div className="text-sm font-bold text-[#1B1B1B]">
-              NO2 is rising while AOD exhibits decadal decline.
+              Positive NO2 point estimate; significant AOD decadal decline.
             </div>
             <p className="text-xs text-[#58585B] leading-relaxed pt-1 border-t border-[#F0F0F0]">
-              Nitrogen dioxide shows continuous upward drift from fossil fuel combustion and industrial machinery,
-              whereas aerosol optical thickness shows slight multi-year decline punctuated by dry-season fire spikes.
+              Tropospheric NO2 exhibits a positive point estimate (+5.36 × 10¹² molecules/cm²/yr) associated with regional
+              combustion and economic development, while particulate aerosol optical depth shows a statistically significant
+              downward trend across the multi-year baseline.
             </p>
           </div>
 
           {/* Question 2: Where? */}
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#E4002B]">
-              02 · WHERE?
+              02 : WHERE?
             </span>
             <div className="text-sm font-bold text-[#1B1B1B]">
-              West Kalimantan, Indonesia (108°E–114°E, 3.5°S–2.5°N)
+              West Kalimantan Bounding Box (108°E-114°E, 3.5°S-2.5°N)
             </div>
             <p className="text-xs text-[#58585B] leading-relaxed pt-1 border-t border-[#F0F0F0]">
-              A province-wide bounding box spanning equatorial peat domes, the Kapuas River basin,
-              Pontianak's urban transportation hub, and extensive agricultural concessions.
+              A regional geographic bounding box covering equatorial peat domes, the Kapuas River basin,
+              Pontianak, and surrounding areas. This is a regional bounding box, not an exact administrative province mask.
             </p>
           </div>
 
           {/* Question 3: How much? */}
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#D97706]">
-              03 · HOW MUCH?
+              03 : HOW MUCH?
             </span>
             <div className="text-sm font-bold font-mono text-[#1B1B1B]">
               NO2: {formatSlope(no2Metadata.slope_per_year, no2Metadata.unit)}
             </div>
             <p className="text-xs text-[#58585B] leading-relaxed pt-1 border-t border-[#F0F0F0]">
-              AOD shifts at an annual rate of <span className="font-mono font-semibold text-[#1B1B1B]">{formatSlope(aodMetadata.slope_per_year, aodMetadata.unit)}</span> across
-              the multi-year observation baseline ({periodLabel}).
+              NO2 shifts at +5.36 × 10¹² molecules/cm²/yr (95% CI: [-3.90 × 10¹², +1.46 × 10¹³]). AOD declines at{" "}
+              <span className="font-mono font-semibold text-[#1B1B1B]">{formatSlope(aodMetadata.slope_per_year, aodMetadata.unit)}</span> across {periodLabel}.
             </p>
           </div>
 
           {/* Question 4: Is it significant? */}
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-2">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#059669]">
-              04 · IS IT SIGNIFICANT?
+              04 : IS IT SIGNIFICANT?
             </span>
             <div className="text-sm font-bold text-[#1B1B1B]">
-              Yes, both trends achieve statistical significance (p &lt; 0.05).
+              NO2 is NOT significant; AOD IS statistically significant.
             </div>
             <p className="text-xs text-[#58585B] leading-relaxed pt-1 border-t border-[#F0F0F0]">
-              Seasonal Mann-Kendall tests confirm the upward NO2 slope (p &lt; 0.0001) is not random noise,
-              providing strong empirical evidence of persistent atmospheric accumulation.
+              OLS regression with month fixed effects and HAC standard errors indicates insufficient statistical evidence of a
+              nonzero linear trend for NO2 (p = 0.2568, CI spans zero). In contrast, AOD decline is statistically significant (p &lt; 0.05).
             </p>
           </div>
         </div>
@@ -121,32 +135,31 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
       <div className="space-y-4">
         <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1B1B1B] flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-[#1967D2]" aria-hidden="true" />
-          Educational Guide: How to Read the Metrics
+          Educational Guide: How to Interpret Scientific Metrics
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-1.5">
-            <h4 className="text-sm font-bold text-[#1B1B1B]">Trend Direction</h4>
+            <h4 className="text-sm font-bold text-[#1B1B1B]">Point Estimate vs. Significant Trend</h4>
             <p className="text-xs text-[#58585B] leading-relaxed">
-              Indicates monotonic trajectory over multi-year periods. In atmospheric science, monotonic trends
-              coexist with sharp seasonal oscillations (e.g. wet monsoon lows vs. August to October dry burning highs).
+              A positive point estimate alone does not prove an upward trend. When the HAC p-value exceeds 0.05 and the
+              confidence interval spans both negative and positive numbers, the data cannot rule out zero trend or natural variability.
             </p>
           </div>
 
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-1.5">
-            <h4 className="text-sm font-bold text-[#1B1B1B]">Rate of Change (Sen's Slope)</h4>
+            <h4 className="text-sm font-bold text-[#1B1B1B]">HAC / Newey-West Standard Errors</h4>
             <p className="text-xs text-[#58585B] leading-relaxed">
-              The median slope across all pair combinations in the time series. Unlike standard linear regression,
-              Sen's slope is robust against severe single-year outliers, such as the catastrophic 2015 El Niño peat fire smoke surge.
+              Atmospheric data exhibit serial autocorrelation (what happens in month t affects month t+1). HAC (Heteroskedasticity
+              and Autocorrelation Consistent) standard errors prevent false-positive conclusions caused by weather persistence.
             </p>
           </div>
 
           <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-1.5">
-            <h4 className="text-sm font-bold text-[#1B1B1B]">Statistical Significance (p-value)</h4>
+            <h4 className="text-sm font-bold text-[#1B1B1B]">Simple Linear Reference Line vs. Model Fit</h4>
             <p className="text-xs text-[#58585B] leading-relaxed">
-              A threshold of p &lt; 0.05 proves less than 5% probability that random weather variation generated the pattern.
-              Note: a non-significant result does not mean fires did not happen; it often reflects intense episodic flare-ups
-              masked by interannual variability.
+              The dashed reference line drawn on the chart is a simple linear regression for visual orientation only. It is not
+              the seasonal OLS + HAC model fit, which controls for month fixed effects and seasonal cycles.
             </p>
           </div>
         </div>
@@ -156,40 +169,42 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
       <div className="space-y-4">
         <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1B1B1B] flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-[#D97706]" aria-hidden="true" />
-          Scientific Limitations &amp; Data Quality Caveats
+          Official Data Quality, Limitations &amp; Guardrails
         </h3>
 
         <div className="p-5 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4 text-xs sm:text-sm text-[#58585B] leading-relaxed">
           <ol className="list-decimal list-inside space-y-3">
             <li className="pl-1">
-              <strong className="text-[#1B1B1B]">Province-Wide Spatial Averaging:</strong> Observations represent
-              spatial averages across the West Kalimantan boundary (108°E to 114°E, 3.5°S to 2.5°N). Regional averaging
-              smoothes localized urban street-level pollution hotspots in Pontianak and specific peat fire coordinates.
+              <strong className="text-[#1B1B1B]">Coverage Metric Definition:</strong> The 96.17% coverage metric represents
+              the proportion of calendar days with available area-averaged values, <strong>NOT</strong> spatial pixel coverage or ground sensor density.
             </li>
             <li className="pl-1">
-              <strong className="text-[#1B1B1B]">Column Density vs. Surface Air Quality:</strong> Tropospheric NO2 and total
-              AOD quantify total vertical atmospheric loading from ground to space, not human breathing level concentrations.
-              Boundary layer height and vertical mixing dictate ground health impacts.
+              <strong className="text-[#1B1B1B]">Negative Observations &amp; Fill Values:</strong> Giovanni fill values (~-1.26765×10³⁰)
+              were screened and converted to missing. Valid negative area-averaged daily values (33 days) were retained per
+              the NASA OMNO2 Collection 4 Version 5.0 README (Section 4.4) to maintain unbiased monthly means.
             </li>
             <li className="pl-1">
-              <strong className="text-[#1B1B1B]">Cloud-Screening Gaps in Equatorial Tropics:</strong> Frequent convective cloud cover
-              in maritime Southeast Asia causes satellite pixel obscuration. The cleaned dataset accounts for this through
-              the <span className="font-mono text-[#1B1B1B] font-semibold">valid_days</span> metric, filtering unrepresentative monthly edge samples.
+              <strong className="text-[#1B1B1B]">Instrumental &amp; Sampling Factors:</strong> OMI row anomalies and variations
+              in sampling geometry over time can affect multi-year trend estimates (OMNO2 README Sections 2.4, 4.4, 6.4).
+            </li>
+            <li className="pl-1">
+              <strong className="text-[#1B1B1B]">Scientific Presentation Guardrail:</strong> Do NOT describe results as ground-level NO2
+              concentrations, causal proof of localized industry activities, or specific city hotspots.
             </li>
           </ol>
         </div>
       </div>
 
-      {/* Official References, Downloads & Tool Utility Bar */}
+      {/* Official Handoff Files & Export Utilities */}
       <div className="p-6 rounded-sm bg-white border border-[#E0E0E0] shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F0F0F0] pb-4">
           <div className="space-y-1">
             <h4 className="text-sm font-bold text-[#1B1B1B] flex items-center gap-2">
               <Database className="w-4 h-4 text-[#1967D2]" aria-hidden="true" />
-              NASA Dataset Citations &amp; Export Utilities
+              Role 1 Official Handoff Data Files &amp; Export Utilities
             </h4>
             <p className="text-xs text-[#58585B]">
-              NASA Giovanni Level-3 Daily and Monthly Products (Aura/OMI OMNO2d and MODIS MYD08_M3)
+              Verified datasets, statistical audit tables, and synthesis packages
             </p>
           </div>
 
@@ -232,7 +247,58 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
           </div>
         </div>
 
-        <div className="text-xs text-[#58585B] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        {/* Direct Download Links for Role 1 Artifacts */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+          <button
+            type="button"
+            onClick={() => downloadFile("/data/no2_dashboard_timeseries.csv", "no2_dashboard_timeseries.csv")}
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+          >
+            <FileCheck2 className="w-4 h-4 text-[#0072BC] shrink-0" aria-hidden="true" />
+            <div>
+              <div className="text-xs font-bold text-[#1B1B1B]">Timeseries CSV</div>
+              <div className="text-[10px] text-[#64748B]">190 months (≥20 days)</div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => downloadFile("/data/no2_insight.json", "no2_insight.json")}
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+          >
+            <Database className="w-4 h-4 text-[#1967D2] shrink-0" aria-hidden="true" />
+            <div>
+              <div className="text-xs font-bold text-[#1B1B1B]">Insight JSON</div>
+              <div className="text-[10px] text-[#64748B]">Metadata, stats &amp; CIs</div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => downloadFile("/data/no2_sensitivity_analysis.csv", "no2_sensitivity_analysis.csv")}
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+          >
+            <FileText className="w-4 h-4 text-[#D97706] shrink-0" aria-hidden="true" />
+            <div>
+              <div className="text-xs font-bold text-[#1B1B1B]">Sensitivity CSV</div>
+              <div className="text-[10px] text-[#64748B]">15, 20, 25 day tests</div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => downloadFile("/data/no2_quality_audit.csv", "no2_quality_audit.csv")}
+            className="flex items-center gap-2 p-2.5 rounded-sm bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#EFF6FF] text-left transition-colors"
+          >
+            <FileText className="w-4 h-4 text-[#059669] shrink-0" aria-hidden="true" />
+            <div>
+              <div className="text-xs font-bold text-[#1B1B1B]">Quality Audit CSV</div>
+              <div className="text-[10px] text-[#64748B]">Monthly coverage data</div>
+            </div>
+          </button>
+        </div>
+
+        <div className="text-xs text-[#58585B] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-2 border-t border-[#F0F0F0]">
           <span>
             Data processed via NASA Goddard Earth Sciences Data and Information Services Center (GES DISC).
           </span>

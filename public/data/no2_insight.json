@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "status": "preliminary",
+  "dataset": {
+    "source": "NASA Giovanni / OMI Aura",
+    "product": "OMNO2d_004",
+    "variable": "ColumnAmountNO2TropCloudScreened",
+    "description": "Area-averaged tropospheric NO2 vertical column, 30% cloud-screened",
+    "unit": "molecules/cm²",
+    "temporal_coverage_requested": {
+      "start": "2010-10-31",
+      "end": "2026-10-31"
+    },
+    "region": {
+      "description": "Bounding box covering West Kalimantan and surrounding areas; not an administrative province mask",
+      "requested_bbox_lonlat": [
+        108,
+        -3.5,
+        114,
+        2.5
+      ],
+      "giovanni_data_bbox_lonlat": [
+        108.125,
+        -3.375,
+        113.875,
+        2.375
+      ]
+    },
+    "giovanni_reproduction_url": "https://giovanni.gsfc.nasa.gov/giovanni/#service=ArAvTs&starttime=2010-10-31T00:00:00Z&endtime=2026-10-31T23:59:59Z&bbox=108,-3.5,114,2.5&data=OMNO2d_004_ColumnAmountNO2TropCloudScreened&portal=GIOVANNI&format=json"
+  },
+  "processing": {
+    "aggregation": "monthly arithmetic mean of available daily area-averaged values",
+    "primary_monthly_inclusion": "valid_days >= 20",
+    "excluded_months": 3,
+    "included_months": 190,
+    "negative_values": "retained if valid; fill values converted to missing",
+    "daily_rows": 5817,
+    "daily_missing_values": 168,
+    "daily_negative_values": 33
+  },
+  "trend": {
+    "method": "OLS with month fixed effects and HAC (Newey-West) standard errors, maxlags=12",
+    "slope_molecules_cm2_per_year": 5357255853493.992,
+    "p_value": 0.2567747651754873,
+    "confidence_interval_95": {
+      "lower": -3901643485967.9497,
+      "upper": 14616155192955.936
+    },
+    "alpha": 0.05,
+    "statistically_significant": false,
+    "direction_of_point_estimate": "positive",
+    "interpretation": "Positive point estimate, but insufficient evidence of a nonzero linear trend at alpha=0.05"
+  },
+  "validation": {
+    "coverage_comparison": [
+      {
+        "rule": "min_20_days",
+        "months_used": 190,
+        "slope": 5357255853493.992,
+        "p_value": 0.2567747651754873,
+        "ci_lower": -3901643485967.9497,
+        "ci_upper": 14616155192955.936
+      },
+      {
+        "rule": "min_80_percent",
+        "months_used": 189,
+        "slope": 5322958253110.827,
+        "p_value": 0.2589516248543422,
+        "ci_lower": -3918835223259.199,
+        "ci_upper": 14564751729480.855
+      }
+    ],
+    "minimum_valid_days_sensitivity": [
+      {
+        "minimum_days": 15,
+        "months_used": 192,
+        "slope": 5453196152103.758,
+        "p_value": 0.2424324993743118,
+        "ci_lower": -3690279613116.86,
+        "ci_upper": 14596671917324.377
+      },
+      {
+        "minimum_days": 20,
+        "months_used": 190,
+        "slope": 5357255853493.992,
+        "p_value": 0.2567747651754873,
+        "ci_lower": -3901643485967.9497,
+        "ci_upper": 14616155192955.936
+      },
+      {
+        "minimum_days": 25,
+        "months_used": 189,
+        "slope": 5322958253110.827,
+        "p_value": 0.2589516248543422,
+        "ci_lower": -3918835223259.199,
+        "ci_upper": 14564751729480.855
+      }
+    ],
+    "average_calendar_day_coverage_pct": 96.16668409426049
+  },
+  "limitations": [
+    "Area-averaged bounding box is not spatially resolved and cannot identify local hotspots",
+    "Tropospheric vertical column is not ground-level NO2 concentration",
+    "Giovanni area-average CSV does not expose per-pixel Level-2 quality flags or OMNO2d Weight for independent screening",
+    "Row anomaly and time-varying spatial sampling may influence long-term trend",
+    "HAC lag choice and remaining residual diagnostics not independently stress-tested",
+    "Monthly averages are unweighted averages of available daily area-average values, not reconstructed from underlying gridded weights"
+  ],
+  "files": {
+    "timeseries": "no2_dashboard_timeseries.csv",
+    "quality_audit": "no2_quality_audit.csv",
+    "sensitivity": "no2_sensitivity_analysis.csv",
+    "coverage_validation": "no2_coverage_validation.csv"
+  }
+}

@@ -33,6 +33,7 @@ interface TimeSeriesChartProps {
   colorScheme: "cyan" | "amber";
   dataPoints: (MonthlyDataPoint | DailyDataPoint)[];
   trendlinePoints?: (number | null)[];
+  trendlineLabel?: string;
   isDailyView?: boolean;
 }
 
@@ -42,6 +43,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   colorScheme,
   dataPoints,
   trendlinePoints,
+  trendlineLabel,
   isDailyView = false,
 }) => {
   const isCyan = colorScheme === "cyan";
@@ -79,8 +81,12 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   ];
 
   if (!isDailyView && trendlinePoints && trendlinePoints.length > 0) {
+    const defaultTrendLabel =
+      variableName === "NO2"
+        ? "Simple Linear Reference Line"
+        : "Sen's Slope Trendline";
     datasets.push({
-      label: "Sen's Slope Trendline",
+      label: trendlineLabel || defaultTrendLabel,
       data: trendlinePoints,
       borderColor: trendlineColor,
       borderWidth: 2.2,

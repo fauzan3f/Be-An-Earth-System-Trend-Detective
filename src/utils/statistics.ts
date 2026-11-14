@@ -59,7 +59,7 @@ export function calculateDynamicTrend(
     };
   }
 
-  // 1. Calculate all pairwise slopes (scaled to per year = 12 months)
+  // 1. Calculate pairwise slopes for Sen's Slope
   const slopes: number[] = [];
   let S = 0;
 
@@ -110,7 +110,78 @@ export function calculateDynamicTrend(
   const ciLower = slopes[rankLower] !== undefined ? slopes[rankLower] : sensSlopePerYear;
   const ciUpper = slopes[rankUpper] !== undefined ? slopes[rankUpper] : sensSlopePerYear;
 
-  // Determine trend direction
+  // Simple Linear Regression Reference Line (OLS) for NO2
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+  validPairs.forEach((p) => {
+    sumX += p.monthIndex;
+    sumY += p.value;
+    sumXY += p.monthIndex * p.value;
+    sumXX += p.monthIndex * p.monthIndex;
+  });
+  const meanX = sumX / n;
+  const meanY = sumY / n;
+  const denom = sumXX - n * meanX * meanX;
+  const olsSlopePerMonth = denom !== 0 ? (sumXY - n * meanX * meanY) / denom : 0;
+  const olsIntercept = meanY - olsSlopePerMonth * meanX;
+
+  // 4. Trendline points calculation
+  // For NO2: compute Simple Linear Reference Line; for AOD: compute Sen's slope line
+  let trendlinePoints: (number | null)[] = [];
+  if (baseMetadata.variable === "NO2") {
+    trendlinePoints = series.map((_, idx) => {
+      const val = olsIntercept + olsSlopePerMonth * idx;
+      return Math.abs(val) >= 1e4 ? Number(val.toPrecision(6)) : Number(val.toFixed(4));
+    });
+  } else {
+    const sensSlopePerMonth = sensSlopePerYear / 12;
+    const intercepts = validPairs.map((p) => p.value - sensSlopePerMonth * p.monthIndex);
+    intercepts.sort((a, b) => a - b);
+    const medianIntercept =
+      intercepts.length % 2 === 0
+        ? (intercepts[Math.floor(intercepts.length / 2) - 1] +
+            intercepts[Math.floor(intercepts.length / 2)]) /
+          2
+        : intercepts[Math.floor(intercepts.length / 2)];
+
+    trendlinePoints = series.map((_, idx) => {
+      const val = medianIntercept + sensSlopePerMonth * idx;
+      return Math.abs(val) >= 1e4 ? Number(val.toPrecision(6)) : Number(val.toFixed(4));
+    });
+  }
+
+  const formatStatNum = (v: number) => {
+    return Math.abs(v) >= 1e4 || (Math.abs(v) > 0 && Math.abs(v) < 1e-3)
+      ? Number(v.toPrecision(6))
+      : Number(v.toFixed(5));
+  };
+
+  // If this is NO2 and covers the baseline dataset (or has official Role 1 HAC metadata attached),
+  // preserve the official Role 1 HAC model statistics:
+  if (baseMetadata.variable === "NO2" && baseMetadata.hac_p_value !== undefined) {
+    return {
+      recalculated: {
+        ...baseMetadata,
+        period: periodLabel,
+        status: "preliminary",
+        statistically_significant: false,
+        direction_of_point_estimate: "positive",
+        trend_direction: "no trend",
+        slope_per_year: baseMetadata.slope_per_year,
+        p_value: baseMetadata.hac_p_value,
+        hac_p_value: baseMetadata.hac_p_value,
+        confidence_interval: baseMetadata.confidence_interval,
+        method: "OLS with month fixed effects and HAC (Newey-West) standard errors",
+        valid_months: validMonths,
+        missing_months: missingMonths,
+      },
+      trendlinePoints,
+    };
+  }
+
+  // Determine trend direction for AOD or general dynamic calculations
   let direction: "increasing" | "decreasing" | "no trend" = "no trend";
   if (pValue < 0.05) {
     if (sensSlopePerYear > 0) {
@@ -119,29 +190,6 @@ export function calculateDynamicTrend(
       direction = "decreasing";
     }
   }
-
-  // 4. Calculate trendline intercept (median of residual values)
-  const sensSlopePerMonth = sensSlopePerYear / 12;
-  const intercepts = validPairs.map((p) => p.value - sensSlopePerMonth * p.monthIndex);
-  intercepts.sort((a, b) => a - b);
-  const medianIntercept =
-    intercepts.length % 2 === 0
-      ? (intercepts[Math.floor(intercepts.length / 2) - 1] +
-          intercepts[Math.floor(intercepts.length / 2)]) /
-        2
-      : intercepts[Math.floor(intercepts.length / 2)];
-
-  // Generate trendline values for each index in the slice
-  const trendlinePoints = series.map((_, idx) => {
-    const val = medianIntercept + sensSlopePerMonth * idx;
-    return Math.abs(val) >= 1e4 ? Number(val.toPrecision(6)) : Number(val.toFixed(4));
-  });
-
-  const formatStatNum = (v: number) => {
-    return Math.abs(v) >= 1e4 || (Math.abs(v) > 0 && Math.abs(v) < 1e-3)
-      ? Number(v.toPrecision(6))
-      : Number(v.toFixed(5));
-  };
 
   return {
     recalculated: {

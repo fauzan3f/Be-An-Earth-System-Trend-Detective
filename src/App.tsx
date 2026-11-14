@@ -261,6 +261,8 @@ export function App() {
             filteredDailySeries={filteredNo2DailySeries}
             trendlinePoints={no2Trendline}
             dailyCoverage={no2Dataset?.dailyCoverage}
+            sensitivityAnalysis={no2Dataset?.sensitivityAnalysis}
+            coverageValidation={no2Dataset?.coverageValidation}
             viewMode={no2ViewMode}
             onViewModeChange={setNo2ViewMode}
             onOpenGlossaryTooltip={handleOpenGlossary}
