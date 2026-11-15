@@ -443,7 +443,7 @@ export function App() {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 font-mono">
             <span>NASA Official: ESDIS Project · Earth Science Division</span>
-            <span>West Kalimantan Multi-Decadal Atmospheric Assessment (2010-2025)</span>
+            <span>West Kalimantan Multi-Decadal Atmospheric Assessment (2010-2026)</span>
           </div>
         </div>
       </footer>

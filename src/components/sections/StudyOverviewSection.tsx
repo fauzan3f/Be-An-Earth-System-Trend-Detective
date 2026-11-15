@@ -121,14 +121,14 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
             <span>Interactive Range Slicer &amp; Quality Filter</span>
           </div>
 
-          {(isCustomLoaded || startYear !== 2010 || endYear !== 2025 || !excludePartialMonths) && (
+          {(isCustomLoaded || startYear !== 2010 || endYear !== 2026 || excludePartialMonths) && (
             <button
               type="button"
               onClick={onResetDefaults}
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-semibold bg-[#F6F6F6] hover:bg-[#EBEBEB] text-[#1B1B1B] border border-[#E0E0E0] transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Reset to 2010-2025 Default</span>
+              <span>Reset to 2010-2026 Default</span>
             </button>
           )}
         </div>
