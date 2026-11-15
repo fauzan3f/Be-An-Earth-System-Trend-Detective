@@ -1,0 +1,44 @@
+{
+  "title": "Interpretasi NO₂ dan AOD di Kalimantan Barat",
+  "period": "2010-11 sampai 2026-10 (bulan dengan kedua data QC: 191)",
+  "status": "exploratory",
+  "cards": [
+    {
+      "id": "no2_trend",
+      "title": "Tren NO₂",
+      "value": "+0,0274 × 10¹⁴ molecules/cm²/tahun",
+      "p_value": 0.6629859666,
+      "finding": "Tidak terdapat bukti statistik yang cukup untuk menyatakan tren linear NO₂ meningkat atau menurun sepanjang periode pengamatan."
+    },
+    {
+      "id": "aod_trend",
+      "title": "Tren AOD",
+      "value": "−0,00315 per tahun",
+      "p_value": 0.5901438715,
+      "finding": "Tren linear AOD keseluruhan periode tidak signifikan secara statistik; hasil sensitif terhadap pemilihan bulan berdasarkan cakupan NO₂."
+    },
+    {
+      "id": "association",
+      "title": "Hubungan NO₂–AOD",
+      "value": "Pearson r = 0,417",
+      "finding": "Kedua parameter menunjukkan asosiasi positif sedang. Korelasi anomali setelah mengurangi pola musiman r = 0,367. Ini tidak membuktikan sebab-akibat."
+    }
+  ],
+  "methodology": {
+    "trend": "OLS dengan efek tetap bulan kalender dan standard error Newey–West HAC 12 lag",
+    "association": "Korelasi Pearson dan korelasi anomali musiman; signifikansi korelasi belum dikoreksi untuk autokorelasi"
+  },
+  "sensitivity": "Dengan mengeluarkan enam bulan yang cakupan area NO₂-nya <30%, tren AOD berubah menjadi −0,00511 per tahun (p=0,0134). Ini adalah uji sensitivitas, bukan bukti tunggal penurunan AOD.",
+  "limitations": [
+    "NO₂: rata-rata berbobot luas pada grid yang lolos QC di dalam Kalimantan Barat; AOD: rata-rata bounding box Giovanni, bukan grid provinsi.",
+    "Cakupan spasial NO₂ berbeda antarbulan; September–Oktober 2026 di bawah 2%.",
+    "QC eksploratif; tidak setara dengan validasi ilmiah akhir.",
+    "AOD tidak memiliki data spasial per grid dalam paket ini.",
+    "Kolom NO₂ dan AOD bukan indeks kualitas udara permukaan; jangan beri label aman/bahaya."
+  ],
+  "spatial_interpretation": {
+    "status": "pending_grid_validation",
+    "message": "Pola spasial NO₂ (hotspot, grid tertinggi, konsistensi lokasi) belum dievaluasi dari 193 GeoJSON bulanan. Jangan mengklaim hotspot spesifik."
+  },
+  "source_file": "NO2_AOD_Scientific_Analysis/scientific_findings.json"
+}

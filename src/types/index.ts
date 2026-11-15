@@ -200,8 +200,91 @@ export interface ComparisonDatasetPayload {
   records: NO2AODComparisonRecord[];
 }
 
+export interface ScientificFindingResult {
+  analysis: string;
+  subset: string;
+  variable: string;
+  n_months: number;
+  slope_per_year?: number;
+  slope_unit?: string;
+  p_value?: number;
+  ci95_lower?: number;
+  ci95_upper?: number;
+  start: string;
+  end: string;
+  coefficient?: number;
+  p_value_naive?: number;
+}
+
+export interface ScientificFindingsPayload {
+  summary: {
+    period: string;
+    n_total_months: number;
+    n_both_available: number;
+    no2_qc_area_pct: {
+      min: number;
+      median: number;
+      below_30pct: number;
+      below_50pct: number;
+    };
+    methods: string;
+    limitations: string[];
+  };
+  results: ScientificFindingResult[];
+}
+
+export interface StatisticalAnalysisRow {
+  analysis: string;
+  subset: string;
+  variable: string;
+  n_months: number;
+  slope_per_year?: number;
+  slope_unit?: string;
+  p_value?: number;
+  ci95_lower?: number;
+  ci95_upper?: number;
+  start: string;
+  end: string;
+  coefficient?: number;
+  p_value_naive?: number;
+}
+
+export interface InterpretationCard {
+  id: string;
+  title: string;
+  value: string;
+  p_value?: number;
+  finding: string;
+}
+
+export interface InterpretationContentPayload {
+  title: string;
+  period: string;
+  status: string;
+  cards: InterpretationCard[];
+  methodology: {
+    trend: string;
+    association: string;
+  };
+  sensitivity: string;
+  limitations: string[];
+  spatial_interpretation: {
+    status: string;
+    message: string;
+  };
+  source_file: string;
+}
+
+export interface ScientificPackageData {
+  findings: ScientificFindingsPayload;
+  content: InterpretationContentPayload;
+  statisticalRows: StatisticalAnalysisRow[];
+  summaryMd: string;
+}
+
 export interface AppDatasets {
   no2: DatasetPayload;
   aod: DatasetPayload;
   comparison?: ComparisonDatasetPayload;
+  scientificPackage?: ScientificPackageData;
 }

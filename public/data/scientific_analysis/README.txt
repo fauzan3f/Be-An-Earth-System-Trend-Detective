@@ -1,0 +1,1 @@
+Scientific analysis for NO2/AOD Kalimantan Barat. Trend: OLS with calendar month fixed effects and HAC lag 12. Sensitivity to NO2 QC area >=30% and >=50%. Correlation p-values are naive and should not be interpreted as autocorrelation-adjusted. Scientific interpretation is provisional due to spatial mismatch and variable NO2 QC coverage.

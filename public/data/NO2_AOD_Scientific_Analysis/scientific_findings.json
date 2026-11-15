@@ -1,0 +1,216 @@
+{
+  "summary": {
+    "period": "2010-10 to 2026-10",
+    "n_total_months": 193,
+    "n_both_available": 191,
+    "no2_qc_area_pct": {
+      "min": 1.1637650703317322,
+      "median": 94.6431274100851,
+      "below_30pct": 6,
+      "below_50pct": 9
+    },
+    "methods": "OLS linear trend with calendar-month fixed effects and Newey-West HAC standard errors (12 lags); Pearson and Spearman correlations, plus seasonal-anomaly Pearson; correlation p-values assume independent samples and are descriptive only.",
+    "limitations": [
+      "NO2 area-weighted QC-passing grids; AOD Giovanni bbox mean; spatial domains differ",
+      "NO2 exploratory QC and variable spatial coverage; 2026-09 and 2026-10 <2%",
+      "AOD not spatial grid data; no spatial AOD heatmap",
+      "Trend is observational; correlation does not imply causation"
+    ]
+  },
+  "results": [
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "all_qc_pass",
+      "variable": "no2",
+      "n_months": 191,
+      "slope_per_year": 0.02744749947498913,
+      "slope_unit": "1e14 molecules/cm2/year",
+      "p_value": 0.6629859666196665,
+      "ci95_lower": -0.09599630920855737,
+      "ci95_upper": 0.15089130815853563,
+      "start": "2010-11",
+      "end": "2026-10"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "all_qc_pass",
+      "variable": "aod",
+      "n_months": 191,
+      "slope_per_year": -0.0031489305986954477,
+      "slope_unit": "AOD/year",
+      "p_value": 0.5901438715018348,
+      "ci95_lower": -0.014607294590057086,
+      "ci95_upper": 0.00830943339266619,
+      "start": "2010-11",
+      "end": "2026-10"
+    },
+    {
+      "analysis": "raw_correlation_pearson",
+      "subset": "all_qc_pass",
+      "variable": "no2_vs_aod",
+      "n_months": 191,
+      "coefficient": 0.4170769704638892,
+      "p_value": 1.9482978567728388e-09,
+      "start": "2010-11",
+      "end": "2026-10"
+    },
+    {
+      "analysis": "raw_correlation_spearman",
+      "subset": "all_qc_pass",
+      "variable": "no2_vs_aod",
+      "n_months": 191,
+      "coefficient": 0.3259300082667401,
+      "p_value": 4.201800638871978e-06,
+      "start": "2010-11",
+      "end": "2026-10"
+    },
+    {
+      "analysis": "monthly_anomaly_correlation_pearson",
+      "subset": "all_qc_pass",
+      "variable": "no2_vs_aod",
+      "n_months": 191,
+      "coefficient": 0.36737422831715194,
+      "p_value_naive": 1.7148981483984317e-07,
+      "start": "2010-11",
+      "end": "2026-10"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "no2_area_at_least_30pct",
+      "variable": "no2",
+      "n_months": 185,
+      "slope_per_year": 0.042707912402719136,
+      "slope_unit": "1e14 molecules/cm2/year",
+      "p_value": 0.5306379831120359,
+      "ci95_lower": -0.0907875294680113,
+      "ci95_upper": 0.17620335427344955,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "no2_area_at_least_30pct",
+      "variable": "aod",
+      "n_months": 185,
+      "slope_per_year": -0.005112640931347624,
+      "slope_unit": "AOD/year",
+      "p_value": 0.013418571716069683,
+      "ci95_lower": -0.009165519911883815,
+      "ci95_upper": -0.001059761950811433,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "raw_correlation_pearson",
+      "subset": "no2_area_at_least_30pct",
+      "variable": "no2_vs_aod",
+      "n_months": 185,
+      "coefficient": 0.53738280361406,
+      "p_value": 3.1087193819652914e-15,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "raw_correlation_spearman",
+      "subset": "no2_area_at_least_30pct",
+      "variable": "no2_vs_aod",
+      "n_months": 185,
+      "coefficient": 0.29447139987111937,
+      "p_value": 4.727998871891892e-05,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "monthly_anomaly_correlation_pearson",
+      "subset": "no2_area_at_least_30pct",
+      "variable": "no2_vs_aod",
+      "n_months": 185,
+      "coefficient": 0.4796595838644638,
+      "p_value_naive": 4.917825625825316e-12,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "no2_area_at_least_50pct",
+      "variable": "no2",
+      "n_months": 183,
+      "slope_per_year": 0.043015336960244795,
+      "slope_unit": "1e14 molecules/cm2/year",
+      "p_value": 0.5344361599193651,
+      "ci95_lower": -0.09269286484425573,
+      "ci95_upper": 0.1787235387647453,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "no2_area_at_least_50pct",
+      "variable": "aod",
+      "n_months": 183,
+      "slope_per_year": -0.00508497785246154,
+      "slope_unit": "AOD/year",
+      "p_value": 0.015956175255808572,
+      "ci95_lower": -0.009220545939553475,
+      "ci95_upper": -0.0009494097653696058,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "raw_correlation_pearson",
+      "subset": "no2_area_at_least_50pct",
+      "variable": "no2_vs_aod",
+      "n_months": 183,
+      "coefficient": 0.5364960327277626,
+      "p_value": 4.967981815588236e-15,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "raw_correlation_spearman",
+      "subset": "no2_area_at_least_50pct",
+      "variable": "no2_vs_aod",
+      "n_months": 183,
+      "coefficient": 0.29541680699913064,
+      "p_value": 4.9087874232318203e-05,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "monthly_anomaly_correlation_pearson",
+      "subset": "no2_area_at_least_50pct",
+      "variable": "no2_vs_aod",
+      "n_months": 183,
+      "coefficient": 0.4800585445210004,
+      "p_value_naive": 6.133780791814877e-12,
+      "start": "2010-11",
+      "end": "2026-08"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "all_no2_qc_pass",
+      "variable": "no2",
+      "n_months": 192,
+      "slope_per_year": 0.025517488378970055,
+      "slope_unit": "1e14 molecules/cm2/year",
+      "p_value": 0.6884275901677797,
+      "ci95_lower": -0.09920725732855204,
+      "ci95_upper": 0.15024223408649215,
+      "start": "2010-11",
+      "end": "2026-10"
+    },
+    {
+      "analysis": "seasonally_adjusted_HAC_trend",
+      "subset": "all_aod_qc_pass",
+      "variable": "aod",
+      "n_months": 191,
+      "slope_per_year": -0.0031489305986954477,
+      "slope_unit": "AOD/year",
+      "p_value": 0.5901438715018348,
+      "ci95_lower": -0.014607294590057086,
+      "ci95_upper": 0.00830943339266619,
+      "start": "2010-11",
+      "end": "2026-10"
+    }
+  ]
+}

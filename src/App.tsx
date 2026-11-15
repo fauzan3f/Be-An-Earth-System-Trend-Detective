@@ -19,6 +19,7 @@ import type {
   DailyDataPoint,
   ComparisonDatasetPayload,
   AODMetadata,
+  ScientificPackageData,
 } from "./types";
 import { calculateDynamicTrend } from "./utils/statistics";
 
@@ -27,6 +28,7 @@ export function App() {
   const [no2Dataset, setNo2Dataset] = useState<DatasetPayload | null>(null);
   const [aodDataset, setAodDataset] = useState<DatasetPayload>(DEFAULT_AOD_DATASET);
   const [comparisonDataset, setComparisonDataset] = useState<ComparisonDatasetPayload | null>(null);
+  const [scientificPackage, setScientificPackage] = useState<ScientificPackageData | null>(null);
   const [isCustomLoaded, setIsCustomLoaded] = useState<boolean>(false);
   const [excludePartialMonths, setExcludePartialMonths] = useState<boolean>(false);
   const [no2ViewMode, setNo2ViewMode] = useState<"monthly" | "daily">("monthly");
@@ -51,6 +53,9 @@ export function App() {
           }
           if (data.comparison) {
             setComparisonDataset(data.comparison);
+          }
+          if (data.scientificPackage) {
+            setScientificPackage(data.scientificPackage);
           }
           setIsLoading(false);
         }
@@ -247,6 +252,9 @@ export function App() {
       if (data.comparison) {
         setComparisonDataset(data.comparison);
       }
+      if (data.scientificPackage) {
+        setScientificPackage(data.scientificPackage);
+      }
       setIsLoading(false);
     });
   };
@@ -327,6 +335,7 @@ export function App() {
             no2Metadata={no2Metadata}
             aodMetadata={aodMetadata}
             periodLabel={periodLabel}
+            scientificPackage={scientificPackage}
             onDownloadCsv={handleDownloadCsv}
             onOpenUpload={() => setIsUploadOpen(true)}
             onOpenGlossary={handleOpenGlossary}

@@ -15,6 +15,10 @@ import type {
   ComparisonMetadata,
   NO2AODComparisonRecord,
   ComparisonDatasetPayload,
+  ScientificFindingsPayload,
+  InterpretationContentPayload,
+  StatisticalAnalysisRow,
+  ScientificPackageData,
 } from "../types";
 import { calculateDynamicTrend } from "../utils/statistics";
 
@@ -31,6 +35,11 @@ import rawDailyAod from "../data/aod_fullstack/aod_daily_giovanni.csv?raw";
 
 import comparisonMetadataJson from "../data/comparison/comparison_metadata.json";
 import comparisonTimeseriesJson from "../data/comparison/no2_aod_comparison.json";
+
+import scientificFindingsJson from "../data/scientific_analysis/scientific_findings.json";
+import rawStatisticalAnalysisCsv from "../data/scientific_analysis/statistical_analysis.csv?raw";
+import interpretationContentJson from "../data/interpretation/interpretation_content.json";
+import rawInterpretationSummaryMd from "../data/interpretation/interpretation_summary.md?raw";
 
 import aodDefaultData from "../data/aod_west_kalimantan_2010_2025.json";
 
@@ -576,21 +585,121 @@ export async function loadComparisonDataset(): Promise<ComparisonDatasetPayload>
 }
 
 /**
+ * Parses the tabular statistical analysis CSV for researcher inspection
+ */
+export function parseStatisticalAnalysisCsv(csvText: string): StatisticalAnalysisRow[] {
+  const parsed = Papa.parse<Record<string, any>>(csvText, {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+  });
+
+  return parsed.data.map((row) => ({
+    analysis: String(row.analysis || ""),
+    subset: String(row.subset || ""),
+    variable: String(row.variable || ""),
+    n_months: Number(row.n_months) || 0,
+    slope_per_year:
+      row.slope_per_year !== undefined &&
+      row.slope_per_year !== null &&
+      row.slope_per_year !== ""
+        ? Number(row.slope_per_year)
+        : undefined,
+    slope_unit: row.slope_unit ? String(row.slope_unit) : undefined,
+    p_value:
+      row.p_value !== undefined && row.p_value !== null && row.p_value !== ""
+        ? Number(row.p_value)
+        : undefined,
+    ci95_lower:
+      row.ci95_lower !== undefined &&
+      row.ci95_lower !== null &&
+      row.ci95_lower !== ""
+        ? Number(row.ci95_lower)
+        : undefined,
+    ci95_upper:
+      row.ci95_upper !== undefined &&
+      row.ci95_upper !== null &&
+      row.ci95_upper !== ""
+        ? Number(row.ci95_upper)
+        : undefined,
+    start: String(row.start || ""),
+    end: String(row.end || ""),
+    coefficient:
+      row.coefficient !== undefined &&
+      row.coefficient !== null &&
+      row.coefficient !== ""
+        ? Number(row.coefficient)
+        : undefined,
+    p_value_naive:
+      row.p_value_naive !== undefined &&
+      row.p_value_naive !== null &&
+      row.p_value_naive !== ""
+        ? Number(row.p_value_naive)
+        : undefined,
+  }));
+}
+
+/**
+ * Loads the official rebuilt scientific analysis and interpretation packages
+ */
+export async function loadScientificPackage(): Promise<ScientificPackageData> {
+  let findings = scientificFindingsJson as unknown as ScientificFindingsPayload;
+  let content = interpretationContentJson as unknown as InterpretationContentPayload;
+  let csvText = rawStatisticalAnalysisCsv;
+  let summaryMd = rawInterpretationSummaryMd;
+
+  try {
+    const [findingsRes, contentRes, csvRes, mdRes] = await Promise.all([
+      fetch("/data/scientific_analysis/scientific_findings.json").catch(() =>
+        fetch("/data/NO2_AOD_Scientific_Analysis/scientific_findings.json")
+      ),
+      fetch("/data/interpretation/interpretation_content.json").catch(() =>
+        fetch("/data/NO2_AOD_Interpretation_REBUILT_20261115/interpretation_content.json")
+      ),
+      fetch("/data/scientific_analysis/statistical_analysis.csv").catch(() =>
+        fetch("/data/NO2_AOD_Scientific_Analysis/statistical_analysis.csv")
+      ),
+      fetch("/data/interpretation/interpretation_summary.md").catch(() =>
+        fetch("/data/NO2_AOD_Interpretation_REBUILT_20261115/interpretation_summary.md")
+      ),
+    ]);
+
+    if (findingsRes && findingsRes.ok) findings = await findingsRes.json();
+    if (contentRes && contentRes.ok) content = await contentRes.json();
+    if (csvRes && csvRes.ok) csvText = await csvRes.text();
+    if (mdRes && mdRes.ok) summaryMd = await mdRes.text();
+  } catch (err) {
+    console.warn("Failed to fetch scientific packages over HTTP, using bundled fallbacks:", err);
+  }
+
+  const statisticalRows = parseStatisticalAnalysisCsv(csvText);
+
+  return {
+    findings,
+    content,
+    statisticalRows,
+    summaryMd,
+  };
+}
+
+/**
  * Default datasets loaded on app boot
  */
 export async function loadDefaultDatasets(
   excludePartialMonths: boolean = false
 ): Promise<AppDatasets> {
-  const [no2, aod, comparison] = await Promise.all([
+  const [no2, aod, comparison, scientificPackage] = await Promise.all([
     loadCleanNo2Dataset(excludePartialMonths),
     loadAodFullstackDataset(excludePartialMonths),
     loadComparisonDataset(),
+    loadScientificPackage(),
   ]);
 
   return {
     no2,
     aod,
     comparison,
+    scientificPackage,
   };
 }
 
