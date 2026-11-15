@@ -1,0 +1,32 @@
+{
+  "region": "West Kalimantan bounding box, Indonesia",
+  "source": "NASA Giovanni MODIS Terra MOD08_D3 Collection 6.1",
+  "variable": "MOD08_D3_6_1_AOD_550_Dark_Target_Deep_Blue_Combined_Mean",
+  "wavelength_nm": 550,
+  "unit": "dimensionless",
+  "requested_bbox": [
+    108,
+    -3.5,
+    114,
+    2.5
+  ],
+  "data_bbox": [
+    108.5,
+    -3.5,
+    113.5,
+    2.5
+  ],
+  "spatial_method": "Giovanni daily bounding-box area average; monthly arithmetic mean of available daily values",
+  "spatial_grid_available": false,
+  "start_date": "2010-10-31",
+  "end_date": "2026-10-31",
+  "months": 193,
+  "months_qc_pass": 191,
+  "daily_source_rows": 5824,
+  "daily_fill_value_rows": 682,
+  "daily_missing_dates": 21,
+  "daily_valid_values": 5135,
+  "qc_note": "Exploratory: at least 30% of study days in month and at least one valid day in each of three temporal segments; boundary Oct 2010 excluded. Not scientific final QC.",
+  "comparability_note": "AOD is Giovanni bounding-box mean, whereas NO2 is province-intersection area-weighted mean; not directly identical spatial support.",
+  "map_note": "Do not fabricate AOD pixel heatmaps from area-averaged time series."
+}

@@ -1,0 +1,24 @@
+{
+  "region": "West Kalimantan, Indonesia",
+  "period": "2010-10 to 2026-10",
+  "records": 193,
+  "both_available": 191,
+  "no2_available": 192,
+  "aod_available": 191,
+  "no2": {
+    "source": "NASA OMI/Aura OMNO2d v004",
+    "unit": "molecules/cm2",
+    "spatial_method": "QC area-weighted mean of province-intersecting grids"
+  },
+  "aod": {
+    "source": "NASA Giovanni MODIS Terra MOD08_D3 v6.1",
+    "unit": "dimensionless",
+    "spatial_method": "Giovanni bounding-box area average"
+  },
+  "limitations": [
+    "Spatial averaging regions/methods differ: province-weighted NO2 vs bounding-box AOD",
+    "QC is exploratory, not final scientific validation",
+    "Do not compare raw numerical magnitudes on one scale or label as surface air-quality categories",
+    "null indicates no QC-accepted monthly value"
+  ]
+}

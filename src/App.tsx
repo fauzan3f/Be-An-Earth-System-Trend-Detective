@@ -13,13 +13,20 @@ import {
   exportToCsv,
   DEFAULT_AOD_DATASET,
 } from "./services/dataLoader";
-import type { DatasetPayload, MonthlyDataPoint, DailyDataPoint } from "./types";
+import type {
+  DatasetPayload,
+  MonthlyDataPoint,
+  DailyDataPoint,
+  ComparisonDatasetPayload,
+  AODMetadata,
+} from "./types";
 import { calculateDynamicTrend } from "./utils/statistics";
 
 export function App() {
   // Datasets loaded into state
   const [no2Dataset, setNo2Dataset] = useState<DatasetPayload | null>(null);
   const [aodDataset, setAodDataset] = useState<DatasetPayload>(DEFAULT_AOD_DATASET);
+  const [comparisonDataset, setComparisonDataset] = useState<ComparisonDatasetPayload | null>(null);
   const [isCustomLoaded, setIsCustomLoaded] = useState<boolean>(false);
   const [excludePartialMonths, setExcludePartialMonths] = useState<boolean>(false);
   const [no2ViewMode, setNo2ViewMode] = useState<"monthly" | "daily">("monthly");
@@ -41,6 +48,9 @@ export function App() {
           setNo2Dataset(data.no2);
           if (!isCustomLoaded) {
             setAodDataset(data.aod);
+          }
+          if (data.comparison) {
+            setComparisonDataset(data.comparison);
           }
           setIsLoading(false);
         }
@@ -234,6 +244,9 @@ export function App() {
     loadDefaultDatasets(false).then((data) => {
       setNo2Dataset(data.no2);
       setAodDataset(data.aod);
+      if (data.comparison) {
+        setComparisonDataset(data.comparison);
+      }
       setIsLoading(false);
     });
   };
@@ -291,7 +304,11 @@ export function App() {
           <AodExplorerSection
             metadata={aodMetadata}
             filteredMonthlySeries={filteredAodSeries}
+            filteredDailySeries={aodDataset?.dailySeries}
             trendlinePoints={aodTrendline}
+            rawMetadata={aodDataset?.rawMetadata as AODMetadata | undefined}
+            aodRecords={aodDataset?.aodRecords}
+            dailyCoverage={aodDataset?.dailyCoverage}
             onOpenGlossaryTooltip={handleOpenGlossary}
             onNextStep={() => scrollTo("trend-comparison")}
           />
@@ -300,6 +317,7 @@ export function App() {
           <TrendComparisonSectionRefactored
             no2Metadata={no2Metadata}
             aodMetadata={aodMetadata}
+            comparisonRecords={comparisonDataset?.records}
             periodLabel={periodLabel}
             onNextStep={() => scrollTo("interpretation")}
           />

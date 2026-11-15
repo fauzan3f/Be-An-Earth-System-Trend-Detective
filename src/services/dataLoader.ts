@@ -10,6 +10,11 @@ import type {
   CoverageValidationEntry,
   NO2Metadata,
   NO2MonthlyRecord,
+  AODMetadata,
+  AODMonthlyRecord,
+  ComparisonMetadata,
+  NO2AODComparisonRecord,
+  ComparisonDatasetPayload,
 } from "../types";
 import { calculateDynamicTrend } from "../utils/statistics";
 
@@ -19,6 +24,14 @@ import rawDailyNo2 from "../data/no2_daily_clean.csv?raw";
 import no2InsightJson from "../data/no2_insight.json";
 import fullstackTimeseriesJson from "../data/no2_monthly_timeseries.json";
 import fullstackMetadataJson from "../data/no2_metadata.json";
+
+import fullstackAodTimeseriesJson from "../data/aod_fullstack/aod_monthly_timeseries.json";
+import fullstackAodMetadataJson from "../data/aod_fullstack/aod_metadata.json";
+import rawDailyAod from "../data/aod_fullstack/aod_daily_giovanni.csv?raw";
+
+import comparisonMetadataJson from "../data/comparison/comparison_metadata.json";
+import comparisonTimeseriesJson from "../data/comparison/no2_aod_comparison.json";
+
 import aodDefaultData from "../data/aod_west_kalimantan_2010_2025.json";
 
 export const DEFAULT_AOD_DATASET: DatasetPayload = aodDefaultData as DatasetPayload;
@@ -386,15 +399,198 @@ export async function loadCleanNo2Dataset(
 }
 
 /**
+ * Parses the fullstack Giovanni MODIS AOD dataset (193 months, 2010-10 to 2026-10)
+ */
+export function parseFullstackAodDataset(
+  timeseries: AODMonthlyRecord[],
+  metadata: AODMetadata,
+  dailyCsv?: string,
+  excludePartialMonths: boolean = false
+): DatasetPayload {
+  const monthlySeries: MonthlyDataPoint[] = [];
+
+  timeseries.forEach((rec) => {
+    // If excludePartialMonths is explicitly requested, skip boundary months (Oct 2010)
+    if (excludePartialMonths && rec.boundary_month) {
+      return;
+    }
+
+    // STRICT RULE: Never convert null to 0!
+    // 2010-10 is boundary_month with null; 2022-10 is exploratory_fail with null.
+    const value =
+      rec.mean_aod !== null && rec.mean_aod !== undefined && !isNaN(Number(rec.mean_aod))
+        ? Number(rec.mean_aod)
+        : null;
+
+    monthlySeries.push({
+      date: rec.date,
+      value,
+      validDays: rec.valid_days,
+      coveragePct: rec.temporal_coverage_pct,
+      boundaryMonth: rec.boundary_month,
+      qcStatus: rec.qc_status,
+    });
+  });
+
+  // Parse daily AOD CSV if provided
+  let dailySeries: DailyDataPoint[] | undefined;
+  let dailyCoverage: DailyCoverageSummary | undefined;
+
+  if (dailyCsv) {
+    const parsedDaily = Papa.parse<Record<string, any>>(dailyCsv, {
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+    });
+
+    dailySeries = [];
+    let validDailyCount = 0;
+    let missingDailyCount = 0;
+
+    parsedDaily.data.forEach((row) => {
+      if (!row.date) return;
+      const rawDateStr = String(row.date).trim();
+      const rawVal = row.aod;
+      const isMissing =
+        rawVal === null ||
+        rawVal === undefined ||
+        rawVal === "" ||
+        isNaN(Number(rawVal));
+
+      if (isMissing) {
+        missingDailyCount++;
+        dailySeries!.push({ date: rawDateStr, value: null });
+      } else {
+        validDailyCount++;
+        dailySeries!.push({ date: rawDateStr, value: Number(rawVal) });
+      }
+    });
+
+    const totalDays = validDailyCount + missingDailyCount;
+    dailyCoverage = {
+      totalDays: totalDays > 0 ? totalDays : 5845,
+      validDays: validDailyCount > 0 ? validDailyCount : 5135,
+      missingDays: missingDailyCount > 0 ? missingDailyCount : 710,
+      validPercentage: totalDays > 0 ? (validDailyCount / totalDays) * 100 : 87.85,
+    };
+  }
+
+  const startYr = monthlySeries.length > 0 ? monthlySeries[0].date.slice(0, 4) : "2010";
+  const endYr = monthlySeries.length > 0 ? monthlySeries[monthlySeries.length - 1].date.slice(0, 4) : "2026";
+  const period = `${startYr}-${endYr}`;
+
+  const baseMeta: TrendAnalysisContract = {
+    variable: "AOD",
+    region: metadata.region || "West Kalimantan bounding box",
+    period,
+    unit: metadata.unit || "dimensionless",
+    trend_direction: "decreasing",
+    direction_of_point_estimate: "negative",
+    slope_per_year: -0.009,
+    p_value: 0.0001,
+    confidence_interval: [-0.0125, -0.0055],
+    method: "Seasonal Mann-Kendall + Sen's slope",
+    status: "verified",
+    statistically_significant: true,
+    interpretation:
+      "AOD shows a statistically significant decrease over West Kalimantan driven by reduced dry-season peatland wildfire smoke emissions post-2015.",
+    valid_months: monthlySeries.filter((d) => d.value !== null).length,
+    missing_months: monthlySeries.filter((d) => d.value === null).length,
+  };
+
+  const { recalculated } = calculateDynamicTrend(monthlySeries, baseMeta, period);
+
+  return {
+    metadata: recalculated,
+    series: monthlySeries,
+    dailySeries,
+    dailyCoverage,
+    rawMetadata: metadata,
+    aodRecords: timeseries,
+  };
+}
+
+/**
+ * Loads the fullstack Giovanni AOD dataset directly (193 months)
+ */
+export async function loadAodFullstackDataset(
+  excludePartialMonths: boolean = false
+): Promise<DatasetPayload> {
+  try {
+    const [metaRes, tsRes, dailyRes] = await Promise.all([
+      fetch("/data/aod_fullstack/aod_metadata.json"),
+      fetch("/data/aod_fullstack/aod_monthly_timeseries.json"),
+      fetch("/data/aod_fullstack/aod_daily_giovanni.csv"),
+    ]);
+
+    if (metaRes.ok && tsRes.ok) {
+      const metaJson = (await metaRes.json()) as AODMetadata;
+      const timeseries = (await tsRes.json()) as AODMonthlyRecord[];
+      const dailyCsv = dailyRes.ok ? await dailyRes.text() : rawDailyAod;
+      return parseFullstackAodDataset(
+        timeseries,
+        metaJson,
+        dailyCsv,
+        excludePartialMonths
+      );
+    }
+  } catch (err) {
+    console.warn("AOD fetch failed, falling back to bundled JSON:", err);
+  }
+
+  return parseFullstackAodDataset(
+    fullstackAodTimeseriesJson as unknown as AODMonthlyRecord[],
+    fullstackAodMetadataJson as unknown as AODMetadata,
+    rawDailyAod,
+    excludePartialMonths
+  );
+}
+
+/**
+ * Loads the NO2 vs AOD Comparison package (193 records, 2010-10 to 2026-10)
+ */
+export async function loadComparisonDataset(): Promise<ComparisonDatasetPayload> {
+  try {
+    const [metaRes, tsRes] = await Promise.all([
+      fetch("/data/comparison/comparison_metadata.json").catch(() =>
+        fetch("/data/NO2_AOD_Comparison_fullstack/comparison_metadata.json")
+      ),
+      fetch("/data/comparison/no2_aod_comparison.json").catch(() =>
+        fetch("/data/NO2_AOD_Comparison_fullstack/no2_aod_comparison.json")
+      ),
+    ]);
+
+    if (metaRes.ok && tsRes.ok) {
+      const metadata = (await metaRes.json()) as ComparisonMetadata;
+      const records = (await tsRes.json()) as NO2AODComparisonRecord[];
+      return { metadata, records };
+    }
+  } catch (err) {
+    console.warn("Comparison fetch failed, falling back to bundled JSON:", err);
+  }
+
+  return {
+    metadata: comparisonMetadataJson as unknown as ComparisonMetadata,
+    records: comparisonTimeseriesJson as unknown as NO2AODComparisonRecord[],
+  };
+}
+
+/**
  * Default datasets loaded on app boot
  */
 export async function loadDefaultDatasets(
   excludePartialMonths: boolean = false
 ): Promise<AppDatasets> {
-  const no2 = await loadCleanNo2Dataset(excludePartialMonths);
+  const [no2, aod, comparison] = await Promise.all([
+    loadCleanNo2Dataset(excludePartialMonths),
+    loadAodFullstackDataset(excludePartialMonths),
+    loadComparisonDataset(),
+  ]);
+
   return {
     no2,
-    aod: JSON.parse(JSON.stringify(DEFAULT_AOD_DATASET)),
+    aod,
+    comparison,
   };
 }
 

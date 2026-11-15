@@ -108,6 +108,82 @@ export interface CoverageValidationEntry {
   ci_upper: number;
 }
 
+export interface AODMetadata {
+  region: string;
+  source: string;
+  variable: string;
+  wavelength_nm: number;
+  unit: string;
+  requested_bbox: [number, number, number, number];
+  data_bbox: [number, number, number, number];
+  spatial_method: string;
+  spatial_grid_available: boolean;
+  start_date: string;
+  end_date: string;
+  months: number;
+  months_qc_pass: number;
+  daily_source_rows: number;
+  daily_fill_value_rows: number;
+  daily_missing_dates: number;
+  daily_valid_values: number;
+  qc_note: string;
+  comparability_note: string;
+  map_note: string;
+}
+
+export interface AODMonthlyRecord {
+  date: string; // "2010-10" to "2026-10"
+  year: number;
+  month: number;
+  mean_aod: number | null; // null for boundary month or QC fail (e.g. 2010-10, 2022-10)
+  unit: string; // "dimensionless"
+  valid_days: number;
+  expected_days_in_study: number;
+  source_record_days: number;
+  missing_source_days: number;
+  missing_value_days: number;
+  temporal_coverage_pct: number;
+  qc_pass: boolean;
+  boundary_month: boolean;
+  data_available: boolean;
+  qc_status: "boundary_month" | "exploratory_pass" | "exploratory_fail" | string;
+}
+
+export interface ComparisonMetadata {
+  region: string;
+  period: string;
+  records: number;
+  both_available: number;
+  no2_available: number;
+  aod_available: number;
+  no2: {
+    source: string;
+    unit: string;
+    spatial_method: string;
+  };
+  aod: {
+    source: string;
+    unit: string;
+    spatial_method: string;
+  };
+  limitations: string[];
+}
+
+export interface NO2AODComparisonRecord {
+  date: string; // "2010-10" to "2026-10"
+  year: number;
+  month: number;
+  no2: number | null;
+  aod: number | null;
+  no2_available: boolean;
+  aod_available: boolean;
+  both_available: boolean;
+  no2_qc_status: string;
+  aod_qc_status: string;
+  no2_qc_area_pct: number;
+  aod_temporal_coverage_pct: number;
+}
+
 export interface DatasetPayload {
   metadata: TrendAnalysisContract;
   series: MonthlyDataPoint[];
@@ -115,10 +191,17 @@ export interface DatasetPayload {
   dailyCoverage?: DailyCoverageSummary;
   sensitivityAnalysis?: SensitivityAnalysisEntry[];
   coverageValidation?: CoverageValidationEntry[];
-  rawMetadata?: NO2Metadata;
+  rawMetadata?: NO2Metadata | AODMetadata;
+  aodRecords?: AODMonthlyRecord[];
+}
+
+export interface ComparisonDatasetPayload {
+  metadata: ComparisonMetadata;
+  records: NO2AODComparisonRecord[];
 }
 
 export interface AppDatasets {
   no2: DatasetPayload;
   aod: DatasetPayload;
+  comparison?: ComparisonDatasetPayload;
 }
