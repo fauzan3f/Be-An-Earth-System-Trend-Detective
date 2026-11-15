@@ -13,7 +13,7 @@ The platform couples real Level-3 satellite records from **NASA Aura/OMI** and *
 
 1. **6-Section Guided Journey:**
    - **1. Welcome Hero:** Project scope, core scientific pillars, and quick start.
-   - **2. Study Overview:** Geographic bounding box, interactive analysis period slider (2010–2025 default), and data quality filters (excluding partial edge months where `valid_days < 5`).
+   - **2. Study Overview:** Geographic bounding box, interactive analysis period slider (2010–2026 default), and data quality filters (excluding partial edge months where `valid_days < 5`).
    - **3. NO₂ Explorer:** Tropospheric nitrogen dioxide (`molecules/cm²`) time series, Sen's slope trendline, and an interactive toggle between monthly means and 5,817 daily observations.
    - **4. AOD Explorer:** Aerosol Optical Depth (550 nm) time series capturing seasonal peaks and the historic 2015/2019 El Niño peat wildfire crises.
    - **5. Trend Comparison:** Side-by-side scientific comparison matrix, synthesis insight, and the critical scientific guardrail notice.
