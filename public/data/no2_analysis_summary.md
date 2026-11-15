@@ -1,4 +1,4 @@
-# NO₂ Analysis Handoff — NASA Giovanni OMNO2d V004
+# NO₂ Analysis Handoff - NASA Giovanni OMNO2d V004
 
 **Status:** Preliminary (bisa diintegrasikan untuk dashboard; bukan validasi ilmiah penuh).
 

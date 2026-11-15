@@ -231,7 +231,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
 
             <p className="text-xs text-[#58585B] leading-relaxed pt-2 border-t border-[#F0F0F0]">
               {content?.cards?.[0]?.finding ||
-                "Tidak terdapat bukti statistik yang cukup untuk menyatakan tren linear NO2 meningkat atau menurun sepanjang periode pengamatan."}
+                "There is insufficient statistical evidence to conclude that linear NO2 is increasing or decreasing over the observation period."}
             </p>
 
             <div className="p-2.5 rounded-sm bg-[#F9FAFB] border border-[#E5E7EB] text-[11px] font-mono text-[#58585B] space-y-1">
@@ -272,7 +272,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
 
             <p className="text-xs text-[#58585B] leading-relaxed pt-2 border-t border-[#F0F0F0]">
               {content?.cards?.[1]?.finding ||
-                "Tren linear AOD keseluruhan periode tidak signifikan secara statistik; hasil sensitif terhadap pemilihan bulan berdasarkan cakupan NO2."}
+                "The linear AOD trend across the full 191-month period is not statistically significant; results are sensitive to month selection based on NO2 spatial coverage."}
             </p>
 
             <div className="p-2.5 rounded-sm bg-[#F9FAFB] border border-[#E5E7EB] text-[11px] font-mono text-[#58585B] space-y-1">
@@ -307,7 +307,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
 
             <p className="text-xs text-[#58585B] leading-relaxed pt-2 border-t border-[#F0F0F0]">
               {content?.cards?.[2]?.finding ||
-                "Kedua parameter menunjukkan asosiasi positif sedang. Korelasi anomali setelah mengurangi pola musiman r = 0,367. Ini tidak membuktikan sebab-akibat."}
+                "Both atmospheric parameters exhibit a moderate positive association (seasonal-anomaly r = 0.367). This observational co-occurrence does not establish direct causation."}
             </p>
 
             <div className="p-2.5 rounded-sm bg-[#F9FAFB] border border-[#E5E7EB] text-[11px] font-mono text-[#58585B] space-y-1">
@@ -347,7 +347,7 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
 
         <p className="text-xs sm:text-sm text-[#1B1B1B] leading-relaxed">
           {content?.sensitivity ||
-            "Dengan mengeluarkan enam bulan yang cakupan area NO2-nya <30%, tren AOD berubah menjadi -0,00511 per tahun (p=0,0134). Ini adalah uji sensitivitas, bukan bukti tunggal penurunan AOD."}
+            "Excluding the six months where NO2 area coverage was < 30% shifts the AOD trend to -0.00511 per year (p = 0.0134). This serves as a sensitivity robustness test, not standalone proof of an AOD decline."}
         </p>
 
         {/* Sensitivity Metrics Comparison Cards */}
@@ -704,9 +704,9 @@ export const InterpretationSection: React.FC<InterpretationSectionProps> = ({
             </div>
             <p className="text-[#58585B]">
               {spatialPackage
-                ? "Validasi spasial 246 grid sel (0.25°) telah dievaluasi. Sebanyak 210 grid (85.4%) memiliki cakupan ≥80%. Kandidat cluster NO2 terdeteksi di sekitar 0.375°N–0.625°N, 110.125°E–110.625°E sebagai anomali kolom satelit relatif, bukan klasifikasi resmi kualitas udara ambien (AQI/ISPU)."
+                ? "Spatial validation across all 246 grid cells (0.25°) has been evaluated. 210 grids (85.4%) achieve >=80% temporal coverage. Candidate elevated NO2 cluster identified around 0.375°N to 0.625°N, 110.125°E to 110.625°E as relative satellite column anomalies rather than regulatory ambient air quality classifications (AQI/ISPU)."
                 : content?.spatial_interpretation?.message ||
-                  "Pola spasial NO2 (hotspot, grid tertinggi, konsistensi lokasi) belum dievaluasi dari 193 GeoJSON bulanan. Jangan mengklaim hotspot spesifik."}
+                  "NO2 spatial patterns (hotspots, top grids, location persistence) have not been evaluated. Avoid claiming specific regulatory hotspots."}
             </p>
           </div>
         </div>

@@ -1,44 +1,44 @@
 {
-  "title": "Interpretasi NO₂ dan AOD di Kalimantan Barat",
-  "period": "2010-11 sampai 2026-10 (bulan dengan kedua data QC: 191)",
+  "title": "Scientific Interpretation: NO2 and AOD in West Kalimantan",
+  "period": "2010-11 to 2026-10 (191 paired QC-valid months)",
   "status": "exploratory",
   "cards": [
     {
       "id": "no2_trend",
-      "title": "Tren NO₂",
-      "value": "+0,0274 × 10¹⁴ molecules/cm²/tahun",
+      "title": "NO2 Trend",
+      "value": "+0.0274 × 10¹⁴ molecules/cm²/yr",
       "p_value": 0.6629859666,
-      "finding": "Tidak terdapat bukti statistik yang cukup untuk menyatakan tren linear NO₂ meningkat atau menurun sepanjang periode pengamatan."
+      "finding": "There is insufficient statistical evidence to conclude that linear NO2 is increasing or decreasing over the 2010-2026 observation period."
     },
     {
       "id": "aod_trend",
-      "title": "Tren AOD",
-      "value": "−0,00315 per tahun",
+      "title": "AOD Trend",
+      "value": "-0.00315 / yr",
       "p_value": 0.5901438715,
-      "finding": "Tren linear AOD keseluruhan periode tidak signifikan secara statistik; hasil sensitif terhadap pemilihan bulan berdasarkan cakupan NO₂."
+      "finding": "The linear AOD trend across the full 191-month period is not statistically significant; results are highly sensitive to month selection based on NO2 spatial coverage."
     },
     {
       "id": "association",
-      "title": "Hubungan NO₂–AOD",
-      "value": "Pearson r = 0,417",
-      "finding": "Kedua parameter menunjukkan asosiasi positif sedang. Korelasi anomali setelah mengurangi pola musiman r = 0,367. Ini tidak membuktikan sebab-akibat."
+      "title": "NO2 - AOD Association",
+      "value": "Pearson r = +0.417",
+      "finding": "Both atmospheric parameters exhibit a moderate positive association. The anomaly correlation after removing seasonal cycles is r = +0.367. This observational co-occurrence does not establish direct causation."
     }
   ],
   "methodology": {
-    "trend": "OLS dengan efek tetap bulan kalender dan standard error Newey–West HAC 12 lag",
-    "association": "Korelasi Pearson dan korelasi anomali musiman; signifikansi korelasi belum dikoreksi untuk autokorelasi"
+    "trend": "OLS linear regression with calendar-month fixed effects and Newey-West HAC standard errors (12 lags)",
+    "association": "Pearson correlation and seasonal-anomaly correlation; significance is not adjusted for temporal serial autocorrelation"
   },
-  "sensitivity": "Dengan mengeluarkan enam bulan yang cakupan area NO₂-nya <30%, tren AOD berubah menjadi −0,00511 per tahun (p=0,0134). Ini adalah uji sensitivitas, bukan bukti tunggal penurunan AOD.",
+  "sensitivity": "Excluding the six months where NO2 spatial coverage was < 30% shifts the AOD trend to -0.00511 per year (p = 0.0134). This serves as a sensitivity robustness test, not standalone proof of an AOD decline.",
   "limitations": [
-    "NO₂: rata-rata berbobot luas pada grid yang lolos QC di dalam Kalimantan Barat; AOD: rata-rata bounding box Giovanni, bukan grid provinsi.",
-    "Cakupan spasial NO₂ berbeda antarbulan; September–Oktober 2026 di bawah 2%.",
-    "QC eksploratif; tidak setara dengan validasi ilmiah akhir.",
-    "AOD tidak memiliki data spasial per grid dalam paket ini.",
-    "Kolom NO₂ dan AOD bukan indeks kualitas udara permukaan; jangan beri label aman/bahaya."
+    "NO2 is calculated as an area-weighted provincial mean across QC-passing grids; AOD is a regional bounding-box average from Giovanni. Geographic averaging supports are not identical.",
+    "NO2 spatial coverage varies substantially across months; September and October 2026 fall below 2% valid provincial area.",
+    "Exploratory quality control flags are designed for interactive investigation, not final Level-2 scientific validation.",
+    "AOD lacks spatial grid data in this Giovanni package; no spatial AOD heatmap is fabricated.",
+    "Tropospheric NO2 and columnar AOD must not be framed as surface regulatory air quality index (AQI/ISPU) health categories."
   ],
   "spatial_interpretation": {
-    "status": "pending_grid_validation",
-    "message": "Pola spasial NO₂ (hotspot, grid tertinggi, konsistensi lokasi) belum dievaluasi dari 193 GeoJSON bulanan. Jangan mengklaim hotspot spesifik."
+    "status": "exploratory_validation_complete",
+    "message": "Spatial validation across all 246 grid cells (0.25°) has been evaluated. 210 grids (85.4%) achieve >=80% temporal coverage. Candidate elevated NO2 cluster identified around 0.375°N to 0.625°N, 110.125°E to 110.625°E as relative satellite column anomalies rather than regulatory ambient air quality classifications."
   },
   "source_file": "NO2_AOD_Scientific_Analysis/scientific_findings.json"
 }

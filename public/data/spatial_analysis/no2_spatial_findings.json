@@ -41,5 +41,5 @@
       "coverage_pct": 84.375
     }
   ],
-  "note": "Koordinat menunjukkan pusat grid, bukan nama wilayah administratif. QC bersifat eksploratif."
+  "note": "Coordinates indicate grid cell centers, not administrative district boundaries. Quality control is exploratory."
 }

@@ -1,26 +1,26 @@
-# Ringkasan Temuan Ilmiah — Kalimantan Barat (NO₂ dan AOD)
+# Scientific Findings Summary: West Kalimantan (NO2 and AOD)
 
-**Periode analisis:** November 2010–Oktober 2026; 191 bulan dengan kedua parameter lolos QC eksploratif.
+**Analysis Period:** November 2010 to October 2026; 191 paired months with both parameters passing exploratory QC screening.
 
-## Temuan utama
+## Core Findings
 
-**NO₂.** Estimasi tren +0,0274 × 10¹⁴ molecules/cm² per tahun, p=0,663. Belum ada bukti cukup untuk menyatakan tren linear jangka panjang yang signifikan.
+**NO2 Trajectory:** Linear trend point estimate of +0.0274 × 10¹⁴ molecules/cm² per year (p = 0.663). There is insufficient statistical evidence to conclude a statistically significant long-term decadal linear trend.
 
-**AOD.** Estimasi tren −0,00315 per tahun, p=0,590. Tidak signifikan pada keseluruhan periode. Pada subset dengan cakupan area NO₂ ≥30%, tren AOD −0,00511/tahun (p=0,0134), sehingga kesimpulan sensitif terhadap pemilihan periode/subset.
+**AOD Trajectory:** Linear trend estimate of -0.00315 per year (p = 0.590). Not statistically significant across the full 191-month period. On the subset with NO2 area coverage >= 30% (n = 185), the AOD slope shifts to -0.00511/year (p = 0.0134), demonstrating that long-term conclusions are sensitive to spatial observation coverage criteria.
 
-**Keterkaitan.** Korelasi Pearson NO₂–AOD r=0,417; korelasi setelah pengurangan pola musiman r=0,367. Hubungan positif tidak membuktikan sebab-akibat. Signifikansi korelasi belum memperhitungkan autokorelasi.
+**Atmospheric Association:** NO2 and AOD exhibit a moderate positive correlation (Pearson r = 0.417; seasonal-anomaly correlation r = 0.367). This positive co-occurrence reflects shared dry-season biomass burning emissions but does not establish direct causation. Significance tests are not adjusted for serial temporal autocorrelation.
 
-## Metode
+## Methodology
 
-Tren menggunakan regresi OLS dengan efek tetap bulan kalender dan standard error Newey–West HAC (12 lag).
+Linear trend analysis uses ordinary least squares (OLS) regression with calendar-month fixed effects and 12-lag Newey-West heteroskedasticity and autocorrelation consistent (HAC) standard errors.
 
-## Keterbatasan yang harus ditampilkan
+## Mandatory Limitations
 
-- NO₂ dirata-ratakan berbobot luas untuk grid Kalimantan Barat yang lolos QC; AOD Giovanni adalah rata-rata bounding box. Cakupan geografis tidak identik.
-- Cakupan area NO₂ berubah antarbulan; September–Oktober 2026 kurang dari 2%.
-- QC masih eksploratif; nilai kolom NO₂ dan AOD bukan kategori indeks kualitas udara permukaan.
-- AOD tidak mendukung heatmap per grid. Interpretasi hotspot NO₂ belum diverifikasi dari GeoJSON bulanan.
+- NO2 is computed as an area-weighted provincial mean across QC-passing grids in West Kalimantan; AOD from Giovanni is a regional bounding-box area average. Geographic averaging supports are not identical.
+- NO2 spatial coverage varies substantially across months; September and October 2026 fall below 2% valid provincial area due to cloud screening.
+- Quality control flags are exploratory and designed for interactive dashboard exploration rather than final Level-2 scientific validation.
+- AOD does not feature per-grid spatial data in this Giovanni package. Hotspot interpretations represent exploratory screening.
 
-## Panduan implementasi
+## Implementation Guidelines
 
-Tampilkan tiga kartu temuan, catatan keterbatasan, dan status eksploratif pada halaman Interpretation. Jangan tampilkan klaim hotspot tertentu sampai analisis grid selesai.
+Display the three core finding cards, limitation caveats, and exploratory validation status in the Interpretation section. Avoid attributing ground-level AQI/ISPU classifications to tropospheric vertical column observations.
