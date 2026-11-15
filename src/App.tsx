@@ -360,9 +360,11 @@ export function App() {
             {/* NASA Emblem Column */}
             <div className="space-y-3 md:col-span-2">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#15418C] flex items-center justify-center font-bold text-xs tracking-tighter text-white border border-[#E4002B]">
-                  <span>NASA</span>
-                </div>
+                <img
+                  src="/favicon.png"
+                  alt="Logo"
+                  className="w-10 h-10 rounded-full object-contain bg-[#15418C] border border-[#E4002B] shadow-sm"
+                />
                 <div>
                   <div className="font-bold text-sm tracking-wide text-white uppercase font-display">
                     National Aeronautics and Space Administration

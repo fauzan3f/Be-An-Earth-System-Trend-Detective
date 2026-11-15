@@ -70,10 +70,12 @@ export const StickyStepperNav: React.FC<StickyStepperNavProps> = ({
           className="flex items-center gap-2.5 shrink-0 group py-1"
           title="NASA Earthdata : Earth System Trend Detective"
         >
-          {/* NASA Meatball Insignia Badge */}
-          <div className="w-8 h-8 rounded-full bg-[#15418C] flex items-center justify-center font-bold text-[11px] tracking-tighter text-white border border-[#E4002B] shadow-sm">
-            <span className="text-[#FFFFFF]">NASA</span>
-          </div>
+          {/* Official Brand Logo */}
+          <img
+            src="/favicon.png"
+            alt="Logo"
+            className="w-8 h-8 rounded-full object-contain bg-[#15418C] border border-[#E4002B] shadow-sm"
+          />
 
           <div className="flex items-baseline gap-1.5 text-xs sm:text-sm">
             <span className="font-light tracking-wide text-white">EARTH</span>
