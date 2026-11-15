@@ -1,0 +1,45 @@
+{
+  "status": "exploratory",
+  "months": 193,
+  "grid_count": 246,
+  "coverage_threshold_pct": 30,
+  "grids_meeting_threshold": 246,
+  "top_5_grids": [
+    {
+      "latitude": 0.875,
+      "longitude": 109.875,
+      "mean_no2": 1366447353143932.5,
+      "valid_months": 107,
+      "coverage_pct": 55.729166666666664
+    },
+    {
+      "latitude": 0.875,
+      "longitude": 110.125,
+      "mean_no2": 1345225543194443.5,
+      "valid_months": 137,
+      "coverage_pct": 71.35416666666667
+    },
+    {
+      "latitude": 0.375,
+      "longitude": 110.375,
+      "mean_no2": 1257255251275915.2,
+      "valid_months": 175,
+      "coverage_pct": 91.14583333333333
+    },
+    {
+      "latitude": 0.375,
+      "longitude": 110.625,
+      "mean_no2": 1251843088339989.5,
+      "valid_months": 179,
+      "coverage_pct": 93.22916666666667
+    },
+    {
+      "latitude": 0.625,
+      "longitude": 110.125,
+      "mean_no2": 1206356129152978.5,
+      "valid_months": 162,
+      "coverage_pct": 84.375
+    }
+  ],
+  "note": "Koordinat menunjukkan pusat grid, bukan nama wilayah administratif. QC bersifat eksploratif."
+}

@@ -20,6 +20,7 @@ import type {
   ComparisonDatasetPayload,
   AODMetadata,
   ScientificPackageData,
+  SpatialAnalysisPackageData,
 } from "./types";
 import { calculateDynamicTrend } from "./utils/statistics";
 
@@ -29,6 +30,7 @@ export function App() {
   const [aodDataset, setAodDataset] = useState<DatasetPayload>(DEFAULT_AOD_DATASET);
   const [comparisonDataset, setComparisonDataset] = useState<ComparisonDatasetPayload | null>(null);
   const [scientificPackage, setScientificPackage] = useState<ScientificPackageData | null>(null);
+  const [spatialPackage, setSpatialPackage] = useState<SpatialAnalysisPackageData | null>(null);
   const [isCustomLoaded, setIsCustomLoaded] = useState<boolean>(false);
   const [excludePartialMonths, setExcludePartialMonths] = useState<boolean>(false);
   const [no2ViewMode, setNo2ViewMode] = useState<"monthly" | "daily">("monthly");
@@ -56,6 +58,9 @@ export function App() {
           }
           if (data.scientificPackage) {
             setScientificPackage(data.scientificPackage);
+          }
+          if (data.spatialPackage) {
+            setSpatialPackage(data.spatialPackage);
           }
           setIsLoading(false);
         }
@@ -255,6 +260,9 @@ export function App() {
       if (data.scientificPackage) {
         setScientificPackage(data.scientificPackage);
       }
+      if (data.spatialPackage) {
+        setSpatialPackage(data.spatialPackage);
+      }
       setIsLoading(false);
     });
   };
@@ -336,6 +344,8 @@ export function App() {
             aodMetadata={aodMetadata}
             periodLabel={periodLabel}
             scientificPackage={scientificPackage}
+            spatialPackage={spatialPackage}
+            onJumpToMap={() => scrollTo("study-overview")}
             onDownloadCsv={handleDownloadCsv}
             onOpenUpload={() => setIsUploadOpen(true)}
             onOpenGlossary={handleOpenGlossary}

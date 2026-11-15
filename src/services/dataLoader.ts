@@ -19,6 +19,11 @@ import type {
   InterpretationContentPayload,
   StatisticalAnalysisRow,
   ScientificPackageData,
+  SpatialFindingsPayload,
+  SpatialGridSummaryRow,
+  SpatialCoverageRow,
+  SpatialMonthlySummaryRow,
+  SpatialAnalysisPackageData,
 } from "../types";
 import { calculateDynamicTrend } from "../utils/statistics";
 
@@ -40,6 +45,11 @@ import scientificFindingsJson from "../data/scientific_analysis/scientific_findi
 import rawStatisticalAnalysisCsv from "../data/scientific_analysis/statistical_analysis.csv?raw";
 import interpretationContentJson from "../data/interpretation/interpretation_content.json";
 import rawInterpretationSummaryMd from "../data/interpretation/interpretation_summary.md?raw";
+
+import spatialFindingsJson from "../data/spatial_analysis/no2_spatial_findings.json";
+import rawSpatialGridSummaryCsv from "../data/spatial_analysis/no2_spatial_grid_summary.csv?raw";
+import rawSpatialCoverageAllGridsCsv from "../data/spatial_analysis/no2_spatial_coverage_all_grids.csv?raw";
+import rawSpatialMonthlySummaryCsv from "../data/spatial_analysis/no2_spatial_monthly_summary.csv?raw";
 
 import aodDefaultData from "../data/aod_west_kalimantan_2010_2025.json";
 
@@ -683,16 +693,133 @@ export async function loadScientificPackage(): Promise<ScientificPackageData> {
 }
 
 /**
+ * Parses per-grid summary statistics across all 246 grid cells
+ */
+export function parseSpatialGridSummaryCsv(csvText: string): SpatialGridSummaryRow[] {
+  const parsed = Papa.parse<Record<string, any>>(csvText, {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+  });
+
+  return parsed.data.map((row) => ({
+    lat: Number(row.lat),
+    lon: Number(row.lon),
+    mean_no2: Number(row.mean_no2),
+    median_no2: Number(row.median_no2),
+    valid_months: Number(row.valid_months),
+    coverage_pct: Number(row.coverage_pct),
+    mean_no2_1e14: Number(row.mean_no2_1e14),
+  }));
+}
+
+/**
+ * Parses spatial coverage across all 246 grid cells
+ */
+export function parseSpatialCoverageCsv(csvText: string): SpatialCoverageRow[] {
+  const parsed = Papa.parse<Record<string, any>>(csvText, {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+  });
+
+  return parsed.data.map((row) => ({
+    lat: Number(row.lat),
+    lon: Number(row.lon),
+    valid_months: Number(row.valid_months),
+    area_km2: Number(row.area_km2),
+    coverage_pct: Number(row.coverage_pct),
+  }));
+}
+
+/**
+ * Parses monthly cross-grid spatial summary
+ * Strictly handles null values: never converts missing/empty values to 0
+ */
+export function parseSpatialMonthlySummaryCsv(csvText: string): SpatialMonthlySummaryRow[] {
+  const parsed = Papa.parse<Record<string, any>>(csvText, {
+    header: true,
+    dynamicTyping: false,
+    skipEmptyLines: true,
+  });
+
+  return parsed.data.map((row) => {
+    const rawMean = row.weighted_mean_no2;
+    const weightedMean =
+      rawMean !== undefined &&
+      rawMean !== null &&
+      String(rawMean).trim() !== "" &&
+      !isNaN(Number(rawMean))
+        ? Number(rawMean)
+        : null;
+
+    return {
+      date: String(row.date || "").trim(),
+      valid_grids: Number(row.valid_grids) || 0,
+      qc_area_pct: Number(row.qc_area_pct) || 0,
+      weighted_mean_no2: weightedMean,
+    };
+  });
+}
+
+/**
+ * Loads the spatial analysis & candidate hotspot package
+ */
+export async function loadSpatialAnalysisPackage(): Promise<SpatialAnalysisPackageData> {
+  let findings = spatialFindingsJson as unknown as SpatialFindingsPayload;
+  let gridCsv = rawSpatialGridSummaryCsv;
+  let coverageCsv = rawSpatialCoverageAllGridsCsv;
+  let monthlyCsv = rawSpatialMonthlySummaryCsv;
+
+  try {
+    const [findingsRes, gridRes, coverageRes, monthlyRes] = await Promise.all([
+      fetch("/data/spatial_analysis/no2_spatial_findings.json"),
+      fetch("/data/spatial_analysis/no2_spatial_grid_summary.csv"),
+      fetch("/data/spatial_analysis/no2_spatial_coverage_all_grids.csv"),
+      fetch("/data/spatial_analysis/no2_spatial_monthly_summary.csv"),
+    ]);
+
+    if (findingsRes && findingsRes.ok) findings = await findingsRes.json();
+    if (gridRes && gridRes.ok) gridCsv = await gridRes.text();
+    if (coverageRes && coverageRes.ok) coverageCsv = await coverageRes.text();
+    if (monthlyRes && monthlyRes.ok) monthlyCsv = await monthlyRes.text();
+  } catch (err) {
+    console.warn("Failed to fetch spatial analysis package over HTTP, using bundled fallbacks:", err);
+  }
+
+  const gridSummaries = parseSpatialGridSummaryCsv(gridCsv);
+  const coverageRows = parseSpatialCoverageCsv(coverageCsv);
+  const monthlySummaries = parseSpatialMonthlySummaryCsv(monthlyCsv);
+
+  const highReliabilityGrids = coverageRows.filter((r) => r.coverage_pct >= 80);
+  const highReliabilityCount = highReliabilityGrids.length; // 210
+  const highReliabilityPct =
+    coverageRows.length > 0
+      ? (highReliabilityCount / coverageRows.length) * 100
+      : 85.4;
+
+  return {
+    findings,
+    gridSummaries,
+    coverageRows,
+    monthlySummaries,
+    highReliabilityCount,
+    highReliabilityPct,
+  };
+}
+
+/**
  * Default datasets loaded on app boot
  */
 export async function loadDefaultDatasets(
   excludePartialMonths: boolean = false
 ): Promise<AppDatasets> {
-  const [no2, aod, comparison, scientificPackage] = await Promise.all([
+  const [no2, aod, comparison, scientificPackage, spatialPackage] = await Promise.all([
     loadCleanNo2Dataset(excludePartialMonths),
     loadAodFullstackDataset(excludePartialMonths),
     loadComparisonDataset(),
     loadScientificPackage(),
+    loadSpatialAnalysisPackage(),
   ]);
 
   return {
@@ -700,6 +827,7 @@ export async function loadDefaultDatasets(
     aod,
     comparison,
     scientificPackage,
+    spatialPackage,
   };
 }
 

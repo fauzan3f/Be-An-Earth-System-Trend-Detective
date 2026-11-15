@@ -282,9 +282,62 @@ export interface ScientificPackageData {
   summaryMd: string;
 }
 
+export interface SpatialTopGrid {
+  latitude: number;
+  longitude: number;
+  mean_no2: number;
+  valid_months: number;
+  coverage_pct: number;
+}
+
+export interface SpatialFindingsPayload {
+  status: string;
+  months: number;
+  grid_count: number;
+  coverage_threshold_pct: number;
+  grids_meeting_threshold: number;
+  top_5_grids: SpatialTopGrid[];
+  note: string;
+}
+
+export interface SpatialGridSummaryRow {
+  lat: number;
+  lon: number;
+  mean_no2: number;
+  median_no2: number;
+  valid_months: number;
+  coverage_pct: number;
+  mean_no2_1e14: number;
+}
+
+export interface SpatialCoverageRow {
+  lat: number;
+  lon: number;
+  valid_months: number;
+  area_km2: number;
+  coverage_pct: number;
+}
+
+export interface SpatialMonthlySummaryRow {
+  date: string;
+  valid_grids: number;
+  qc_area_pct: number;
+  weighted_mean_no2: number | null;
+}
+
+export interface SpatialAnalysisPackageData {
+  findings: SpatialFindingsPayload;
+  gridSummaries: SpatialGridSummaryRow[];
+  coverageRows: SpatialCoverageRow[];
+  monthlySummaries: SpatialMonthlySummaryRow[];
+  highReliabilityCount: number;
+  highReliabilityPct: number;
+}
+
 export interface AppDatasets {
   no2: DatasetPayload;
   aod: DatasetPayload;
   comparison?: ComparisonDatasetPayload;
   scientificPackage?: ScientificPackageData;
+  spatialPackage?: SpatialAnalysisPackageData;
 }
