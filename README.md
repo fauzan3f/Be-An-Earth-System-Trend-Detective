@@ -3,7 +3,7 @@
 > **2026 NASA Space Apps Challenge Project**  
 > *Explore. Detect. Understand Earth System Trends.*
 
-An interactive, data-driven scientific web application designed to investigate multi-decadal atmospheric trends across **West Kalimantan, Indonesia (108°E–114°E, 3.5°S–2.5°N)** from **2010 to 2025**.
+An interactive, data-driven scientific web application designed to investigate multi-decadal atmospheric trends across **West Kalimantan, Indonesia (108°E–114°E, 3.5°S–2.5°N)** from **2010 to 2026**.
 
 The platform couples real Level-3 satellite records from **NASA Aura/OMI** and **NASA Terra/Aqua MODIS** with non-parametric statistical testing (**Seasonal Mann-Kendall and Sen's slope**) to differentiate genuine multi-year environmental shifts from seasonal oscillations and episodic wildfire surges.
 
