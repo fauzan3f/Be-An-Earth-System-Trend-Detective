@@ -63,6 +63,8 @@ export const No2ExplorerSection: React.FC<No2ExplorerSectionProps> = ({
   const ciUpper = metadata.confidence_interval?.[1] ?? 14616155192955.94;
   const totalMonths = metadata.valid_months + metadata.missing_months;
   const validPercentage = totalMonths > 0 ? (metadata.valid_months / totalMonths) * 100 : 98.4;
+  const activePoint = filteredMonthlySeries[activeMapMonthIndex ?? 0];
+  const isBoundaryActive = activePoint?.boundaryMonth || activePoint?.date === "2010-10";
 
   const sensitivityRows =
     sensitivityAnalysis && sensitivityAnalysis.length > 0
@@ -241,7 +243,7 @@ export const No2ExplorerSection: React.FC<No2ExplorerSectionProps> = ({
         {/* Metric 4: Area-Average Coverage & Data Quality */}
         <div className="p-4 rounded-sm bg-white border border-[#E5E7EB] shadow-sm space-y-1 relative">
           <div className="flex items-center justify-between text-[11px] font-mono font-bold text-[#58585B] uppercase tracking-wider">
-            <span>AREA-AVERAGE COVERAGE</span>
+            <span>AREA &amp; QC SPATIAL COVERAGE</span>
             <button
               type="button"
               onClick={() => setShowCoverageTooltip(!showCoverageTooltip)}
@@ -253,15 +255,32 @@ export const No2ExplorerSection: React.FC<No2ExplorerSectionProps> = ({
           </div>
 
           <div className="text-xs font-bold text-[#1B1B1B]">
-            NASA Giovanni / OMI OMNO2d
+            NASA Giovanni / OMI OMNO2d (0.25° Grid)
           </div>
 
           <div className="text-[11px] font-mono text-[#58585B]">
-            {metadata.valid_months} of {totalMonths} months ({validPercentage.toFixed(1)}% valid)
+            {metadata.valid_months} of {totalMonths} months ({validPercentage.toFixed(1)}% QC pass)
           </div>
 
+          {/* Dynamic Active Month Telemetry Readout (Rule C) */}
+          {activePoint && (
+            <div className="pt-1.5 border-t border-[#F0F0F0] text-[10px] font-mono text-[#1B1B1B] space-y-0.5">
+              <div className="flex justify-between">
+                <span className="text-[#58585B]">Selected Month ({activePoint.date}):</span>
+                <span className="font-bold">
+                  {activePoint.qcAreaPct !== undefined ? `${activePoint.qcAreaPct.toFixed(1)}%` : "N/A"} area · {activePoint.validGridCount ?? 246}/246 cells
+                </span>
+              </div>
+              {activePoint.missingUrlDays !== undefined && activePoint.missingUrlDays > 0 && (
+                <div className="text-[#DC2626]">
+                  Missing Observations: {activePoint.missingUrlDays} cloud/satellite days
+                </div>
+              )}
+            </div>
+          )}
+
           {dailyCoverage && (
-            <div className="flex items-center gap-1 text-[10px] text-[#1B1B1B] pt-0.5 font-mono">
+            <div className="flex items-center gap-1 text-[10px] text-[#58585B] pt-0.5 font-mono">
               <CalendarCheck className="w-3 h-3 shrink-0 text-[#58585B]" aria-hidden="true" />
               <span>
                 {dailyCoverage.validPercentage.toFixed(2)}% calendar days ({dailyCoverage.validDays.toLocaleString()} valid / {dailyCoverage.missingDays} cloud days)
@@ -275,8 +294,7 @@ export const No2ExplorerSection: React.FC<No2ExplorerSectionProps> = ({
               <strong className="text-white block mb-1">Important Coverage Clarification:</strong>
               The {dailyCoverage?.validPercentage.toFixed(2) || "96.17"}% coverage metric represents the{" "}
               <strong>proportion of calendar days with available area-averaged values</strong>, NOT spatial pixel coverage.
-              Giovanni Fill Values (~-1.26765×10³⁰) were converted to missing, while {dailyCoverage?.negativeDays || 33} valid
-              negative daily observations were retained per OMNO2 Collection 4 Version 5.0 README.
+              Spatial 0.25° grid cells are screened through Giovanni quality flags and exported in the fullstack package.
             </div>
           )}
         </div>
@@ -313,6 +331,25 @@ export const No2ExplorerSection: React.FC<No2ExplorerSectionProps> = ({
           activePointIndex={viewMode === "monthly" ? activeMapMonthIndex : undefined}
           onHoverPointIndex={onSelectMapMonthIndex}
         />
+
+        {/* October 2010 Boundary Month Notice (Rule A) */}
+        {isBoundaryActive && (
+          <div className="p-3 rounded-sm bg-[#3B1214] border border-[#DC2626] text-white flex items-start gap-2 text-xs leading-snug">
+            <AlertCircle className="w-4 h-4 text-[#EF4444] shrink-0 mt-0.5" aria-hidden="true" />
+            <span>
+              <strong>Study Boundary Month Notice (October 2010):</strong> October 2010 is a study boundary month
+              (contains only 2010-10-31); no monthly QC average or spatial grid values are exported.
+            </span>
+          </div>
+        )}
+
+        {/* Mandatory QC & Color Scale Disclaimer (Rule C) */}
+        <div className="p-3 rounded-sm bg-[#F6F6F6] border border-[#E5E7EB] text-[11px] text-[#1B1B1B] leading-relaxed flex items-start gap-2">
+          <Info className="w-3.5 h-3.5 text-[#15418C] shrink-0 mt-0.5" aria-hidden="true" />
+          <span>
+            <strong>Mandatory QC &amp; Color Scale Disclaimer:</strong> Exploratory QC (not final). Color scale (blue to red) represents relative tropospheric NO₂ vertical column density (molecules/cm²), NOT official ground-level air quality index (AQI) or health risk categories.
+          </span>
+        </div>
 
         {/* Mandatory Trendline Labeling Notice per no2_analysis_summary.md */}
         <div className="p-3 rounded-sm bg-[#F6F6F6] border border-[#E5E7EB] text-[11px] text-[#1B1B1B] leading-relaxed flex items-start gap-2">

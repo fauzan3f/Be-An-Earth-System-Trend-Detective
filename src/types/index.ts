@@ -1,3 +1,48 @@
+export interface NO2Metadata {
+  region: string;
+  source: string;
+  variable: string;
+  unit: string;
+  spatial_resolution_degrees: number;
+  start_period: string;
+  end_period: string;
+  expected_months: number;
+  processed_months: number;
+  missing_months: string[];
+  invalid_months: string[];
+  grid_index_file: string;
+  grid_geometry: string;
+  qc_note: string;
+  boundary_note: string;
+  generated_utc: string;
+}
+
+export interface NO2MonthlyRecord {
+  date: string; // "2010-10" to "2026-10"
+  year: number;
+  month: number;
+  mean_no2: number | null; // null for "2010-10"
+  unit: string; // "molecules/cm2"
+  qc_area_pct: number; // 0 to 100
+  valid_grid_count: number; // out of 246
+  total_grid_count: number; // 246
+  missing_url_days: number;
+  boundary_month: boolean; // true for "2010-10"
+  data_available: boolean;
+  qc_status: string; // "boundary_month" | "exploratory_pass"
+  processing_version: string;
+}
+
+export interface GridCellProperties {
+  date: string;
+  no2: number | null; // null if failed QC or missing - NEVER convert null to 0!
+  qc_pass: boolean;
+  area_km2: number;
+  valid_days: number;
+  temporal_coverage_pct: number;
+  unit: string;
+}
+
 export interface TrendAnalysisContract {
   variable: "NO2" | "AOD" | string;
   region: string; // e.g., "West Kalimantan"
@@ -19,9 +64,16 @@ export interface TrendAnalysisContract {
 
 export interface MonthlyDataPoint {
   date: string; // YYYY-MM
-  value: number | null; // null if Fill Value / missing
+  value: number | null; // null if Fill Value / missing / boundary month - NEVER converted to 0
   validDays?: number; // valid observation days in this month
   coveragePct?: number; // calendar day coverage percent
+  qcAreaPct?: number; // qc_area_pct (0 to 100)
+  validGridCount?: number; // valid_grid_count (out of 246)
+  totalGridCount?: number; // total_grid_count (246)
+  missingUrlDays?: number; // missing_url_days
+  boundaryMonth?: boolean; // boundary_month (true for 2010-10)
+  qcStatus?: string; // "boundary_month" | "exploratory_pass"
+  geojsonPath?: string; // "grid_geojson/no2_grid_YYYY-MM.geojson"
 }
 
 export interface DailyDataPoint {
@@ -63,6 +115,7 @@ export interface DatasetPayload {
   dailyCoverage?: DailyCoverageSummary;
   sensitivityAnalysis?: SensitivityAnalysisEntry[];
   coverageValidation?: CoverageValidationEntry[];
+  rawMetadata?: NO2Metadata;
 }
 
 export interface AppDatasets {

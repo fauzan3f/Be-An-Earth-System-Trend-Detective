@@ -155,6 +155,9 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         callbacks: {
           label: (context) => {
             const rawVal = context.raw as number | null;
+            if (context.label === "2010-10") {
+              return "October 2010 is a study boundary month (contains only 2010-10-31); no monthly QC average or spatial grid values are exported.";
+            }
             if (rawVal === null || rawVal === undefined) {
               return `${context.dataset.label}: Missing / Cloud Gap`;
             }

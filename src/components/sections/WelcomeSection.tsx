@@ -29,7 +29,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onStartExploring
             </div>
             <span className="text-white/30">:</span>
             <div className="flex items-baseline gap-1.5">
-              <AnimatedCounter value={190} className="text-sm font-bold text-white tracking-widest font-mono" />
+              <AnimatedCounter value={193} className="text-sm font-bold text-white tracking-widest font-mono" />
               <span className="text-[9px] uppercase tracking-wider text-[#A1A1AA]">MONTHS</span>
             </div>
             <span className="text-white/30">:</span>

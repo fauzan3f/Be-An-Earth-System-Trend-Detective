@@ -21,13 +21,13 @@ export function App() {
   const [no2Dataset, setNo2Dataset] = useState<DatasetPayload | null>(null);
   const [aodDataset, setAodDataset] = useState<DatasetPayload>(DEFAULT_AOD_DATASET);
   const [isCustomLoaded, setIsCustomLoaded] = useState<boolean>(false);
-  const [excludePartialMonths, setExcludePartialMonths] = useState<boolean>(true);
+  const [excludePartialMonths, setExcludePartialMonths] = useState<boolean>(false);
   const [no2ViewMode, setNo2ViewMode] = useState<"monthly" | "daily">("monthly");
   const [, setIsLoading] = useState<boolean>(true);
 
-  // Default analysis period: 2010 to 2025
+  // Default analysis period: 2010 to 2026 (full 193-month fullstack dataset)
   const [startYear, setStartYear] = useState<number>(2010);
-  const [endYear, setEndYear] = useState<number>(2025);
+  const [endYear, setEndYear] = useState<number>(2026);
   const [activeMapMonthIndex, setActiveMapMonthIndex] = useState<number>(0);
 
   // Load real cleaned NASA Giovanni datasets on mount and when filter changes
@@ -225,13 +225,13 @@ export function App() {
 
   const handleResetDefaults = () => {
     setIsLoading(true);
-    setExcludePartialMonths(true);
+    setExcludePartialMonths(false);
     setNo2ViewMode("monthly");
     setStartYear(2010);
-    setEndYear(2025);
+    setEndYear(2026);
     setIsCustomLoaded(false);
 
-    loadDefaultDatasets(true).then((data) => {
+    loadDefaultDatasets(false).then((data) => {
       setNo2Dataset(data.no2);
       setAodDataset(data.aod);
       setIsLoading(false);

@@ -226,7 +226,7 @@ export const StudyOverviewSection: React.FC<StudyOverviewSectionProps> = ({
             </h3>
           </div>
           <div className="text-xs font-mono text-[#58585B]">
-            Interactive Timeline Sync · 190 Monthly Observation Records
+            Interactive Timeline Sync · 193 Monthly Spatial Grid Records (0.25° Resolution)
           </div>
         </div>
 

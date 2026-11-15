@@ -141,12 +141,12 @@ export const InteractiveControlsBar: React.FC<InteractiveControlsBarProps> = ({
           </button>
 
           {/* Reset Defaults button */}
-          {(isCustomLoaded || startYear !== 2010 || endYear !== 2025) && (
+          {(isCustomLoaded || startYear !== 2010 || endYear !== 2026) && (
             <button
               type="button"
               onClick={onResetDefaults}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400"
-              title="Reset time slice and restore default 2010-2025 datasets"
+              title="Reset time slice and restore default 2010-2026 datasets"
               aria-label="Reset to Default Data"
             >
               <RotateCcw className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
